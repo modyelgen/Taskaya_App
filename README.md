@@ -1,4 +1,4 @@
-# taskaya
+# Taskaya
 
 A mobile Application project to manage tasks and add reminder for them
 
