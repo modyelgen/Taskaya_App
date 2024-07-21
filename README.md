@@ -1,16 +1,10 @@
 # taskaya
 
-A new Flutter project.
+A mobile Application project to manage tasks and add reminder for them
 
 ## Getting Started
+ This Project can help user to manage his tasks which may be text or audio, 
+   it helps him to remind user with tasks according to task priority 
 
-This project is a starting point for a Flutter application.
+![cover](https://github.com/user-attachments/assets/ed3625cc-4bec-4862-8935-4ff16b2fbf45)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
