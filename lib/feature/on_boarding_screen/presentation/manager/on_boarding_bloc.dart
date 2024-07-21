@@ -13,7 +13,10 @@ class OnBoardingBloc extends Bloc<OnBoardingEvent, OnBoardingState> {
         if(currIndex<2){
           currIndex++;
           pageController.jumpToPage(currIndex);
-        emit(OnBoardingChangePage());
+          emit(OnBoardingChangePage());
+        }
+        else if (currIndex==2){
+          emit(OnBoardingFinishedState());
         }
       }
       else if(event is MoveBackwardEvent){

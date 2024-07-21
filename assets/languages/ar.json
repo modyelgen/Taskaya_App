@@ -6,6 +6,11 @@
   "onBoardingSecondary2": "من خلال تاسكايا يمكنك إنشاء روتين شخصي لتظل منتجًا في تطبيقنا",
   "onBoardingSecondary3": "يمكنك تنظيم مهامك اليومية عن طريق إضافتها إلى فئات منفصلة",
   "next_Button": "التالي",
+  "get_started": "البدء",
   "back_Button": "رجوع",
-  "curr_Lang": "EN"
+  "curr_Lang": "EN",
+  "welcome_Message": "اهلا بك في تاسكايا",
+  "enter_Name": "ادخل اسمك",
+  "join": "انضم",
+  "skip": "تخطي"
 }

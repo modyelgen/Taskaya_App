@@ -35,7 +35,10 @@ final void Function() toggleLang;
               ),
             );
           },
-          listener: (context,state){}) ,
+          listener: (context,state){
+            if(state is OnBoardingFinishedState){
+            }
+          }) ,
     );
   }
 }
