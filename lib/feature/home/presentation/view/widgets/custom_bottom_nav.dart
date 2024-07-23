@@ -2,33 +2,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
-import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
+import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({
     super.key,
-    required this.height,
-    required this.bloc,
+    required this.currIndex,
+    required this.changeIndex,
   });
 
-  final double height;
-  final HomeBloc bloc;
+  final int currIndex;
+  final void Function({required int currIndex})changeIndex;
 
   @override
   Widget build(BuildContext context) {
+    final double height=BasicDimension.screenHeight(context);
     return BottomAppBar(
       elevation: 0,
       color: bottomNavBarColor,
-      height: height*0.12,
+      height: height*0.1,
       notchMargin: 0,
       shape: const CircularNotchedRectangle(),
       child: SizedBox(
-        height: height*0.1,
+        height: height*0.08,
         child: BottomNavigationBar(
-            currentIndex: bloc.bottomNavCurrIndex,
+            currentIndex:currIndex,
             onTap: (int index){
-              bloc.add(ChangeBottomNavIconEvent(currIndex: index));
+              changeIndex(currIndex: index);
             },
-            iconSize: 30,
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.grey,
@@ -37,7 +37,6 @@ class BottomNavBar extends StatelessWidget {
             unselectedIconTheme: const IconThemeData(color:Colors.grey),
             showUnselectedLabels: true,
             elevation: 0,
-
             items: [
               BottomNavigationBarItem(icon: const Icon(CupertinoIcons.house_alt_fill),label: "task".tr(context),),
               BottomNavigationBarItem(icon: const Icon(CupertinoIcons.calendar),label: "calendar".tr(context),),

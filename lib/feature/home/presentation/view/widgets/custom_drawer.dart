@@ -42,7 +42,7 @@ class CustomDrawer extends StatelessWidget {
                 child: Center(child: Text(name,style: CustomTextStyle.fontBold16,maxLines: 2,))),
             ListTile(
               title: Text("english".tr(context)),
-              trailing: IconButton(icon: const Icon(Icons.language_rounded), onPressed: (){
+              trailing: IconButton(icon: const Icon(CupertinoIcons.wrench_fill), onPressed: (){
                 bloc.add(ChangeLanguageEvent());
               }),
             ),

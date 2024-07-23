@@ -1,13 +1,19 @@
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskaya/core/utilites/cache_helper/shared_pref.dart';
+import 'package:taskaya/feature/calendar/presentation/view/calendar_view.dart';
+import 'package:taskaya/feature/focus/presentation/view/foucs_view.dart';
 import 'package:taskaya/feature/home/presentation/view/home_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/on_boarding_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/widgets/start_screen.dart';
+import 'package:taskaya/feature/profile/presentation/view/profile_view.dart';
 class RouterApp {
   static const kOnBoardingView = '/OnBoardingView';
   static const kStartScreen = '/StartScreenView';
   static const kHomeView = '/HomeView';
+  static const kCalendarView = '/HomeView';
+  static const kFocusView = '/HomeView';
+  static const kProfileView = '/HomeView';
   static GoRouter goRouter(OnBoardingArgument args){
     return GoRouter(routes: [
       GoRoute(
@@ -33,6 +39,24 @@ class RouterApp {
         path: kHomeView,
         builder: (context, state) {
           return const HomeView();
+        },
+      ),
+      GoRoute(
+        path: kCalendarView,
+        builder: (context, state) {
+          return const CalendarView();
+        },
+      ),
+      GoRoute(
+        path: kFocusView,
+        builder: (context, state) {
+          return const FocusView();
+        },
+      ),
+      GoRoute(
+        path: kProfileView,
+        builder: (context, state) {
+          return const ProfileView();
         },
       ),
     ]);

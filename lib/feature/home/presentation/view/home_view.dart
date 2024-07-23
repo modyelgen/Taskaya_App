@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
+import 'package:taskaya/feature/calendar/presentation/view/calendar_view.dart';
+import 'package:taskaya/feature/focus/presentation/view/foucs_view.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/custom_bottom_nav.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/custom_drawer.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/home_body.dart';
+import 'package:taskaya/feature/profile/presentation/view/profile_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -26,22 +29,15 @@ class HomeView extends StatelessWidget {
           return SafeArea(
             child: Scaffold(
               resizeToAvoidBottomInset: false,
-              drawer: CustomDrawer(
+              drawer:bloc.bottomNavCurrIndex==0? CustomDrawer(
                 profilePath: bloc.profilePicPath,
                 width: width,
                 height: height,
                 name: bloc.name,
-              ),
-              body: bloc.isLoading ? const Center(child: CircularProgressIndicator()) :
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: width * 0.03,
-                  vertical: height * 0.015,
-                ),
-                child: HomeBody(width: width, bloc: bloc, height: height),
-              ),
+              ):null,
+              body: [HomeBody(width: width, bloc: bloc, height: height),const CalendarView(),const FocusView(),const ProfileView()][bloc.bottomNavCurrIndex],
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: bloc.bottomNavCurrIndex==0?FloatingActionButton(
+              floatingActionButton:bloc.bottomNavCurrIndex==0? FloatingActionButton(
                 shape: const CircleBorder(),
                 onPressed: null,
                 backgroundColor: buttonColor,
@@ -50,7 +46,9 @@ class HomeView extends StatelessWidget {
                   color: whiteColor,
                 ),
               ):null,
-              bottomNavigationBar: BottomNavBar(height: height, bloc: bloc),
+              bottomNavigationBar: BottomNavBar(currIndex:bloc.bottomNavCurrIndex ,changeIndex:({required int currIndex}){
+                bloc.add(ChangeBottomNavIconEvent(currIndex: currIndex));
+              } ,),
             ),
           );
         },
