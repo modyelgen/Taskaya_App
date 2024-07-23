@@ -12,5 +12,16 @@
   "welcome_Message": "اهلا بك في تاسكايا",
   "enter_Name": "ادخل اسمك",
   "join": "انضم",
-  "skip": "تخطي"
+  "skip": "تخطي",
+  "profilePic": "صورة شخصية",
+  "camera": "الكاميرا",
+  "gallery": "المعرض",
+  "task": "المهام",
+  "calendar": "التقويم",
+  "focus": "التركيز",
+  "profile": "الملف الشخصي",
+  "english": "العربية",
+  "searchLabel": "ابحث عن مهمتك ...",
+  "emptyTaskTitle": "ماذا تريد ان تضيف الي مهامك اليوم ؟",
+  "emptyTaskSec": "اضغط علي `+` لاضافة مهمة جديدة"
 }

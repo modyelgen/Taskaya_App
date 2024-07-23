@@ -12,5 +12,16 @@
   "welcome_Message": "Welcome To Taskaya",
   "enter_Name": "Enter Your Name",
   "join": "JOIN",
-  "skip": "SKIP"
+  "skip": "SKIP",
+  "profilePic": "Profile Photo",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "task": "Tasks",
+  "calendar": "Calendar",
+  "focus": "Focus",
+  "profile": "Profile",
+  "english": "English",
+  "searchLabel": "Search for your Task...",
+  "emptyTaskTitle": "What do you want to do Today ?",
+  "emptyTaskSec": "Tab `+` to add new Task"
 }

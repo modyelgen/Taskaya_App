@@ -4,16 +4,16 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:taskaya/bloc_observer.dart';
 import 'package:taskaya/core/utilites/app_theme/mode_theme.dart';
+import 'package:taskaya/core/utilites/cache_helper/shared_pref.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
-import 'package:taskaya/feature/on_boarding_screen/presentation/view/on_boarding_view.dart';
+import 'package:taskaya/core/utilites/navigation/routers.dart';
 import 'package:taskaya/feature/settings/presentation/manager/settings_bloc.dart';
 
-
-
-void main() {
+void main()async{
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer=SimpleBlocObserver();
+  await SetAppState.setShared();
   runApp(const MyApp());
 }
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       create: (context)=>SettingsBloc()..add(InitialEvent()),
       child: BlocBuilder<SettingsBloc,SettingsState>(builder: (context,state){
         var bloc=BlocProvider.of<SettingsBloc>(context);
-        return MaterialApp(
+        return MaterialApp.router(
           supportedLocales: const [
             Locale('en'),
             Locale('ar'),
@@ -50,13 +50,11 @@ class MyApp extends StatelessWidget {
           theme: bloc.appTheme,
           themeMode: bloc.appMode,
           darkTheme: darkTheme,
-          home: OnBoardingView(
-            toggleLang:(){
-              bloc.add(ChangeLanguageEvent());
-            },
-              toggleMode:(){
-                bloc.add(ToggleModeEvent());
-          }),
+          routerConfig:RouterApp.goRouter(OnBoardingArgument(toggleMode:(){
+            bloc.add(ToggleModeEvent());
+          } , toggleLang: (){
+            bloc.add(ChangeLanguageEvent());
+          })),
         );
       })
     );
