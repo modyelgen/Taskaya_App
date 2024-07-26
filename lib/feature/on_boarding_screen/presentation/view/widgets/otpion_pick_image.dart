@@ -4,20 +4,20 @@ import 'package:image_picker/image_picker.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
-import 'package:taskaya/feature/on_boarding_screen/presentation/manager/start_screen_cubit/start_screen_cubit.dart';
-
 
 class OptionPickImage extends StatelessWidget {
   const OptionPickImage({
     super.key,
     required this.width,
     required this.height,
-    required this.cubit,
+    required this.deleteImage,
+    required this.pickImage
   });
 
   final double width;
   final double height;
-  final StartScreenCubit cubit;
+  final void Function()deleteImage;
+  final void Function({required ImageSource source})pickImage;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,7 @@ class OptionPickImage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("profilePic".tr(context),style: CustomTextStyle.fontBold16,),
-              IconButton(onPressed: (){
-                cubit.deletePickedImage();
-              }, icon:  const Icon(CupertinoIcons.delete_simple))
+              IconButton(onPressed:deleteImage, icon:  const Icon(CupertinoIcons.delete_simple))
             ],
           ),
           SizedBox(height: height*0.015),
@@ -50,9 +48,7 @@ class OptionPickImage extends StatelessWidget {
                       shape:BoxShape.circle,
                       border: Border.all(color: purpleColor),
                     ),
-                    child: IconButton(onPressed: (){
-                      cubit.pickImage(imageSource:ImageSource.camera);
-                    }, icon: Icon(CupertinoIcons.camera,color: purpleColor,)),
+                    child: IconButton(onPressed:(){pickImage(source: ImageSource.camera);},icon: Icon(CupertinoIcons.camera,color: purpleColor,)),
                   ),
                   SizedBox(
                     height: height*0.015,
@@ -70,7 +66,7 @@ class OptionPickImage extends StatelessWidget {
                       border: Border.all(color: purpleColor),
                     ),
                     child: IconButton(onPressed: (){
-                      cubit.pickImage(imageSource:ImageSource.gallery);
+                      pickImage(source: ImageSource.gallery);
                     }, icon: Icon(CupertinoIcons.photo,color: purpleColor,)),
                   ),
                   SizedBox(

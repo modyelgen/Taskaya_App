@@ -1,5 +1,5 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:taskaya/core/utilites/cache_helper/file_caching_helper.dart';
 import 'package:taskaya/core/utilites/constants/parameters.dart';
@@ -11,6 +11,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool isLoading=false;
   String name='';
   String profilePicPath='null';
+  Icon? tempIcon;
   HomeBloc() : super(HomeInitialState()) {
     on<HomeEvent>((event, emit) async{
       if(event is LoadCustomDataEvent){

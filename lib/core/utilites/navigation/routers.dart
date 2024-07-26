@@ -6,7 +6,6 @@ import 'package:taskaya/feature/focus/presentation/view/foucs_view.dart';
 import 'package:taskaya/feature/home/presentation/view/home_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/on_boarding_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/widgets/start_screen.dart';
-import 'package:taskaya/feature/profile/presentation/view/profile_view.dart';
 class RouterApp {
   static const kOnBoardingView = '/OnBoardingView';
   static const kStartScreen = '/StartScreenView';
@@ -53,12 +52,12 @@ class RouterApp {
           return const FocusView();
         },
       ),
-      GoRoute(
-        path: kProfileView,
-        builder: (context, state) {
-          return const ProfileView();
-        },
-      ),
+      // GoRoute(
+      //   path: kProfileView,
+      //   builder: (context, state) {
+      //     return const ProfileView();
+      //   },
+      // ),
     ]);
   }
 

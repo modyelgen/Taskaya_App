@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
@@ -50,7 +51,11 @@ class StartScreenView extends StatelessWidget {
                             GestureDetector(
                               onTap: (){
                                 showModalBottomSheet(context: context, builder: (context){
-                                  return OptionPickImage(width: width, height: height, cubit: cubit,);
+                                  return OptionPickImage(width: width, height: height,
+                                    deleteImage: (){cubit.deletePickedImage();},
+                                    pickImage: ({required ImageSource source}){
+                                    cubit.pickImage(imageSource: source);
+                                  },);
                                 });
                               },
                               child: CircleAvatar(

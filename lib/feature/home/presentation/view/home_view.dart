@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
 import 'package:taskaya/feature/calendar/presentation/view/calendar_view.dart';
@@ -10,6 +11,7 @@ import 'package:taskaya/feature/home/presentation/view/widgets/custom_bottom_nav
 import 'package:taskaya/feature/home/presentation/view/widgets/custom_drawer.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/home_body.dart';
 import 'package:taskaya/feature/profile/presentation/view/profile_view.dart';
+
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -35,17 +37,21 @@ class HomeView extends StatelessWidget {
                 height: height,
                 name: bloc.name,
               ):null,
-              body: [HomeBody(width: width, bloc: bloc, height: height),const CalendarView(),const FocusView(),const ProfileView()][bloc.bottomNavCurrIndex],
+              body: [HomeBody(width: width, bloc: bloc, height: height),const CalendarView(),const FocusView(),ProfileView(name:bloc.name,profilePath:bloc.profilePicPath)][bloc.bottomNavCurrIndex],
               floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-              floatingActionButton:bloc.bottomNavCurrIndex==0? FloatingActionButton(
+              floatingActionButton:FloatingActionButton(
                 shape: const CircleBorder(),
-                onPressed: null,
+                onPressed:bloc.bottomNavCurrIndex==0? ()async{
+                  await showIconPicker(context,iconPackModes: [IconPack.cupertino],).then((value){
+                    bloc.tempIcon=Icon(value);
+                  },);
+                }:null,
                 backgroundColor: buttonColor,
                 child: Icon(
                   CupertinoIcons.add,
                   color: whiteColor,
                 ),
-              ):null,
+              ),
               bottomNavigationBar: BottomNavBar(currIndex:bloc.bottomNavCurrIndex ,changeIndex:({required int currIndex}){
                 bloc.add(ChangeBottomNavIconEvent(currIndex: currIndex));
               } ,),

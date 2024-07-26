@@ -17,7 +17,9 @@ class SmallProfilePic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundImage:profilePath!="null"? FileImage(File(profilePath)):null,
+      backgroundImage:profilePath != "null"
+          ? FileImage(File(profilePath))
+          : const AssetImage("assets/home/default_profile.png") as ImageProvider,
       backgroundColor: purpleColor,
       radius: width*0.06,
       // child:Center(
