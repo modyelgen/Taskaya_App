@@ -9,7 +9,6 @@ ThemeData lightTheme=ThemeData(
     brightness: Brightness.light,
     fontFamily: 'Lato',
     colorScheme: ColorScheme.light(
-
       primary: darkColor,
     ),
     iconButtonTheme: const IconButtonThemeData(style: ButtonStyle())
@@ -23,7 +22,6 @@ ThemeData darkTheme=ThemeData(
   brightness: Brightness.dark,
   fontFamily: 'Lato',
   colorScheme: ColorScheme.dark(
-
     primary: whiteColor,
   ),
 );

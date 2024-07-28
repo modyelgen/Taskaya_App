@@ -23,23 +23,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   SettingsBloc() : super(SettingsInitialState()) {
     on<SettingsEvent>((event, emit)async{
-      // if (event is InitialEvent) {
-      //   FlutterNativeSplash.remove();
-      // } else if (event is ToggleModeEvent) {
-      //   await changeMood(emit);
-      // } else if (event is ChangeLanguageEvent) {
-      //   await changeLanguage(emit);
-      // } else if (event is ChangeNotificationEvent) {
-      //    changeNotification(emit);
-      // } else if (event is DeleteCurrentImageEvent) {
-      //    await deleteProfilePic(name: event.name, emit: emit);
-      // } else if (event is ChangeCurrentImageEvent) {
-      //   await  updateProfilePic(name: event.nameAsKey, emit: emit);
-      // } else if (event is ChangeCurrentNameEvent) {
-      //   await updateName(name: event.name, emit: emit);
-      // } else if (event is OptionPickImageEvent) {
-      //   await pickImageFromCameraOrGallery(source: event.source, name: event.name);
-      // }
       switch(event){
         case InitialEvent():
           FlutterNativeSplash.remove();
@@ -89,14 +72,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   Future<void> changeLanguage(Emitter<SettingsState>emit)async{
     if(local.languageCode=="en"){
       local=const Locale("ar");
+
       await SetAppState.prefs?.setString("local", local.languageCode);
     }
     else{
-      await SetAppState.prefs?.setString("local", local.languageCode);
       local=const Locale("en");
+      await SetAppState.prefs?.setString("local", local.languageCode);
+
     }
     emit(ToggleToDifferentLanguageState());
   }
+
+
 
   void changeNotification(Emitter<SettingsState>emit)async{
     enableNotification=!enableNotification;

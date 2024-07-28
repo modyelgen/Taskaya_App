@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:taskaya/core/utilites/app_theme/colors.dart';
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({super.key,this.label,this.suffix,this.prefix,this.controller,
     this.border,this.borderWidth,this.type,this.enablePassword,this.enableOutLine=true,this.labelFontSize,
-    this.floatingLabelBehavior,this.onSaved,this.onChanged,this.validator,
+    this.floatingLabelBehavior,this.onSaved,this.onChanged,this.validator,this.enableEnabledBorder=true,this.enableFocusBorder=true,this.enableNormalBorder=true,
     this.maxLength,this.inputFormatters,this.autoFillList,this.expand=false,this.minLine,this.onFiledSubmitted,this.borderColor,this.focusNode,this.style,this.initialValue,this.enable=true,this.align,this.autoFocus,this.maxLines,this.fillColor,this.filled});
   final String?label;
   final Widget?suffix ;
@@ -24,6 +25,9 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLength;
   final List<TextInputFormatter>? inputFormatters;
   final TextStyle? style;
+  final bool enableNormalBorder;
+  final bool enableFocusBorder;
+  final bool enableEnabledBorder;
   final TextAlign? align;
   final bool?autoFocus;
   final int?maxLines;
@@ -65,15 +69,15 @@ class CustomTextFormField extends StatelessWidget {
         labelText: label,
         prefixIcon:prefix,
         suffixIcon: suffix,
-        border: buildOutlineInputBorder(borderRadius: border),
-        focusedBorder: buildOutlineInputBorder(borderColor:enableOutLine?borderColor:fillColor ,borderRadius: border),
-        enabledBorder: buildOutlineInputBorder(borderColor:enableOutLine? borderColor:fillColor,borderRadius: border),
+        border:enableNormalBorder? buildOutlineInputBorder(borderRadius: border,borderWidth: borderWidth):InputBorder.none,
+        focusedBorder: enableFocusBorder? buildOutlineInputBorder(colorBorder:enableOutLine?borderColor:fillColor ,borderRadius: border,borderWidth: borderWidth):InputBorder.none,
+        enabledBorder: enableEnabledBorder? buildOutlineInputBorder(colorBorder:enableOutLine? borderColor:fillColor,borderRadius: border,borderWidth: borderWidth):InputBorder.none,
         labelStyle: TextStyle(color: const Color(0xffB4ADAD),fontSize: labelFontSize??14,),
       ),
     );
   }
 
-  OutlineInputBorder buildOutlineInputBorder({Color? borderColor,double?borderRadius,}) {
+  OutlineInputBorder buildOutlineInputBorder({Color? colorBorder,double?borderRadius,double?borderWidth}) {
     return  OutlineInputBorder(
         borderRadius:  BorderRadius.only(
           topLeft: Radius.circular(borderRadius??20),
@@ -81,6 +85,6 @@ class CustomTextFormField extends StatelessWidget {
           bottomLeft: Radius.circular(borderRadius??20),
           bottomRight: Radius.circular(borderRadius??20),
         ),
-        borderSide: BorderSide(color: borderColor??Colors.grey,width: 2));
+        borderSide: BorderSide(color: colorBorder??customBorderColor,width: borderWidth??2));
   }
 }

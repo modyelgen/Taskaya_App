@@ -165,7 +165,7 @@ class CustomChangeNameBottomSheet extends StatelessWidget {
              child: CustomTextFormField(
               border: 4,
               style: CustomTextStyle.fontNormal14.copyWith(color: Colors.white),
-              borderColor: borderColor,
+              borderColor: customBorderColor,
               controller:controller,
           ),
            ),
