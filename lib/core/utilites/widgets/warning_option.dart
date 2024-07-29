@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
+import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
 import 'package:taskaya/core/utilites/widgets/custom_alert_widget.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 
@@ -11,16 +12,17 @@ class WarningOption extends StatelessWidget {
   final void Function()?noFunction;
   @override
   Widget build(BuildContext context) {
+    final double width=BasicDimension.screenWidth(context);
     return Center(
       child: CustomAlertWidget(
         title: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(CupertinoIcons.exclamationmark_triangle_fill,color: Color(0xffFFB636),),
+            Icon(CupertinoIcons.exclamationmark_triangle_fill,color: const Color(0xffFFB636),size:width*0.1 ,),
             Text("Are you Sure to Delete ?",style: CustomTextStyle.fontBold18,overflow: TextOverflow.ellipsis,),
           ],
         ),
-        rightOption: CustomBigButton(label: "Yes",color: deleteColor,labelStyle: CustomTextStyle.fontBoldWhite16,onTap: (){
+        rightOption: CustomBigButton(altWidth:width*0.3 ,label:"Yes",color: deleteColor,labelStyle: CustomTextStyle.fontBoldWhite16,onTap: (){
           Navigator.pop(context,true);
         },),
         leftOption: TextButton(onPressed: (){

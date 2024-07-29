@@ -17,11 +17,10 @@ class CustomBigButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double height=BasicDimension.screenHeight(context);
-    final double width=BasicDimension.screenWidth(context);
     return InkWell(
         onTap:onTap,
         child: Container(
-          width:altWidth??width*0.4,
+          width:altWidth,
           height:height*0.055,
           decoration: BoxDecoration(
             border: boxBorder,
@@ -29,15 +28,16 @@ class CustomBigButton extends StatelessWidget {
             color:color?? Theme.of(context).colorScheme.onInverseSurface,),
           child: Center(
               child: isLoading? const CircularProgressIndicator(color: Colors.white,) :
-              Row(
+              altWidget?? Row(
                 mainAxisAlignment:mainAxisAlignment?? MainAxisAlignment.center,
                 children: [
-                  altWidget??Text(label??"",style: labelStyle??TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Theme.of(context).colorScheme.onPrimary),),
+                  Text(label??"",style: labelStyle??TextStyle(fontWeight: FontWeight.bold,fontSize: 18,color: Theme.of(context).colorScheme.onPrimary),),
                   enable?const Padding(
                     padding:  EdgeInsets.only(left: 16.0),
                     child:  Icon(Icons.arrow_forward_rounded,color: Colors.white,),
                   ):const SizedBox(height: 0,)
                 ],
-              )),));
+              )),
+        ));
   }
 }

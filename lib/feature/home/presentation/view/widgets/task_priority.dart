@@ -4,7 +4,7 @@ import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
-import 'package:taskaya/feature/home/presentation/view/widgets/priority_item.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/priority_item.dart';
 
 class TaskPriority extends StatelessWidget {
   const TaskPriority({super.key,required this.height,required this.width,required this.bloc});

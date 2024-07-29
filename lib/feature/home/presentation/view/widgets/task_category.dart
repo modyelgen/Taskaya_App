@@ -4,7 +4,7 @@ import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
-import 'package:taskaya/feature/home/presentation/view/widgets/category_item.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/category_item.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/create_new_category.dart';
 
 class TaskCategory extends StatelessWidget {

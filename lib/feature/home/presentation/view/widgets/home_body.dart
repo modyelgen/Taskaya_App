@@ -44,11 +44,14 @@ class HomeBody extends StatelessWidget {
             ],
           ),
           SizedBox(height: height*0.02,),
-          CustomTextFormField(borderColor: customBorderColor,borderWidth: 0.8,border: 8,suffix: const Icon(CupertinoIcons.search),label: "searchLabel".tr(context),),
+          CustomTextFormField(onChanged: (value){
+            bloc.add(SearchInTasksEvent(query: value));
+          },borderColor: customBorderColor,borderWidth: 0.8,border: 8,suffix: const Icon(CupertinoIcons.search),label: "searchLabel".tr(context),),
           SizedBox(height: height*0.015,),
-          bloc.taskList.isEmpty&&bloc.completedList.isEmpty?
-          EmptyTasks(width: width, height: height):
-          TasksList(height: height, width: width,bloc: bloc,),
+          (bloc.taskList.isNotEmpty)?
+          TasksList(height: height, width: width,bloc: bloc,) :
+          EmptyTasks(width: width, height: height)
+
         ],
       ),
     );

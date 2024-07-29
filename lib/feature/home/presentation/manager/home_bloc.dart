@@ -18,6 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool pickCategory=false;
   bool pickPriority=false;
   String name='';
+  String querySearch='';
   late Database taskDb;
   String profilePicPath='null';
   List<CategoryModel>categoryList=[];
@@ -27,7 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   int? currCategory;
   TaskTimeModel?taskTimeModel;
   List<TaskModel>taskList=[];
-  List<TaskModel>completedList=[];
+  List<TaskModel>filteredList=[];
   HomeBloc() : super(HomeInitialState()){
     on<HomeEvent>((event, emit) async{
       switch(event){
@@ -54,14 +55,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await createNewTask(emit);
           break;
         case MoveTaskEvent():
-          await moveTask(index: event.index, toComplete: event.toComplete, emit: emit);
+          await moveTask(taskID: event.taskID, toComplete: event.toComplete, emit: emit);
           break;
         case LoadTaskEvent():
           await loadTaskList(emit: emit);
           break;
         case RemoveTaskEvent():
-          await deleteTask(index: event.index, complete: event.isComplete, emit: emit);
+          await deleteTask(taskID: event.taskID, complete: event.isComplete, emit: emit);
           break;
+        case SearchInTasksEvent():
+          await searchInTask(emit: emit, query: event.query);
       }
     });
   }
@@ -152,13 +155,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
            FileCacheHelper().getData(database: value, tableName: "tasks").then((value) {
             if(value.isNotEmpty){
               for(var item in value){
-                if(item['completed']==0){
-                  taskList.add(TaskModel.fromMap(item));
-                }
-                else{
-                  completedList.add(TaskModel.fromMap(item));
-                }
+                taskList.add(TaskModel.fromMap(item));
               }
+              filteredList=List<TaskModel>.from(taskList);
             }
           });
         });
@@ -233,19 +232,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   }
 
-  Future<void>moveTask({required int index,required bool toComplete,required Emitter<HomeState>emit})async{
+  Future<void>moveTask({required String taskID,required bool toComplete,required Emitter<HomeState>emit})async{
     if(toComplete){
-      taskList[index].completed=1;
-      await updateTaskAtDb(task:taskList[index]);
-      completedList.insert(0, taskList[index]);
-      taskList.removeAt(index);
-
+      taskList.where((model)=>model.taskID==taskID).first.completed=1;
     }
     else{
-      completedList[index].completed=0;
-      await updateTaskAtDb(task: completedList.last);
-      taskList.add(completedList[index]);
-      completedList.removeAt(index);
+      taskList.where((model)=>model.taskID==taskID).first.completed=0;
     }
     emit(MoveTaskState());
   }
@@ -296,17 +288,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void> deleteTask({required int index,required bool complete,required Emitter<HomeState>emit})async{
-    String taskID='';
-    if(complete){
-      taskID=completedList[index].taskID;
-      completedList.removeAt(index);
-
-    }
-    else{
-      taskID=taskList[index].taskID;
-      taskList.removeAt(index);
-    }
+  Future<void> deleteTask({required String taskID,required bool complete,required Emitter<HomeState>emit})async{
+    taskList.removeWhere((model)=>model.taskID==taskID);
     emit(RemoveTaskState());
     await taskDb.delete(
       'tasks',
@@ -322,5 +305,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       where: 'taskID = ?',
       whereArgs: [task.taskID],
     );
+  }
+
+  Future<void>searchInTask({required Emitter<HomeState>emit,required String query})async{
+    if(query.isNotEmpty&&query.trim().isNotEmpty){
+      querySearch=query;
+      filteredList = filteredList.where((item) {
+        return item.taskName.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    }
+    else{
+      querySearch='';
+      filteredList=List.from(taskList);
+    }
+    emit(ChangeTaskAccordingToSearchState());
   }
 }

@@ -42,3 +42,4 @@ class CustomAppLocalizationDelegate extends LocalizationsDelegate<CustomAppLocal
 extension TranslateX on String {
   String tr (BuildContext context)=>CustomAppLocalization.of(context)!.translateText(this);
 }
+

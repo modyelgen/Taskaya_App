@@ -29,14 +29,14 @@ final class ChangeCurrCategoryIndexEvent extends HomeEvent {
 final class CreateNewTaskEvent extends HomeEvent {}
 
 final class MoveTaskEvent extends HomeEvent {
-  final int index;
+  final String taskID;
   final bool toComplete;
-  MoveTaskEvent({required this.toComplete,required this.index});
+  MoveTaskEvent({required this.toComplete,required this.taskID});
 }
 final class RemoveTaskEvent extends HomeEvent {
-  final int index;
+  final String taskID;
   final bool isComplete;
-  RemoveTaskEvent({required this.isComplete,required this.index});
+  RemoveTaskEvent({required this.isComplete,required this.taskID});
 }
 
 final class LoadTaskEvent extends HomeEvent {}
@@ -44,4 +44,9 @@ final class LoadTaskEvent extends HomeEvent {}
 final class AllowToPopEvent extends HomeEvent {
   final bool allow;
   AllowToPopEvent({required this.allow});
+}
+
+final class SearchInTasksEvent extends HomeEvent {
+  final String query;
+  SearchInTasksEvent({this.query=""});
 }

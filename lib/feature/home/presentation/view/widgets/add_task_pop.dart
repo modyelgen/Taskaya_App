@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_text_form_field.dart';
+import 'package:taskaya/core/utilites/widgets/leave_app.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_category.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_priority.dart';
@@ -78,12 +79,10 @@ class AddTaskPop extends StatelessWidget {
               },icon:Icon(CupertinoIcons.flag,color:customBorderColor),tooltip: "Task Priority",),
 
               const Spacer(),
-              Transform.rotate(
-                  angle: 45 * 3.1415927 / 180,
-                  child:IconButton(onPressed: (){
-                    bloc.add(CreateNewTaskEvent());
-                    Navigator.pop(context);
-                  },icon:Icon(CupertinoIcons.paperplane,color: buttonColor,)))
+              IconButton(onPressed: (){
+                bloc.add(CreateNewTaskEvent());
+                Navigator.pop(context);
+              },icon:Icon(CupertinoIcons.paperplane,color: buttonColor,).rotate(angle: 45)),
             ],
           ),
         ],

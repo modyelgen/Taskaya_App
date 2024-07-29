@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
@@ -16,4 +17,10 @@ class LeaveAppOption extends StatelessWidget {
       leftOption: TextButton(onPressed: noFunction,child: Text("No",style: CustomTextStyle.fontNormal16.copyWith(color: buttonColor),)),
     );
   }
+}
+extension RotateWidget on Widget {
+  Widget rotate ({required double angle})=>Transform.rotate(
+    angle: (angle*pi)/180,
+    child: this
+  );
 }

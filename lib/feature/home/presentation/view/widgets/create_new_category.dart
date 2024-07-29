@@ -6,7 +6,7 @@ import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 import 'package:taskaya/core/utilites/widgets/custom_text_form_field.dart';
 import 'package:taskaya/feature/home/presentation/manager/category_cubit/category_cubit.dart';
-import 'package:taskaya/feature/home/presentation/view/widgets/category_item.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/category_item.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/pick_custom_color.dart';
 
 class CreateNewCategoryScreen extends StatelessWidget {

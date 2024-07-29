@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
+import 'package:taskaya/feature/home/data/models/task_model.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
-import 'package:taskaya/feature/home/presentation/view/widgets/task_item.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/task_item.dart';
 class TasksList extends StatelessWidget {
   const TasksList({
     super.key,
@@ -19,6 +20,8 @@ class TasksList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<TaskModel>missionList=bloc.filteredList.where((model)=>model.completed==0).toList();
+    List<TaskModel>completeList=bloc.filteredList.where((model)=>model.completed==1).toList();
     return Expanded(
       child: SizedBox(
         height: height*0.6,
@@ -26,6 +29,7 @@ class TasksList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomBigButton(
+              altWidth: width*0.33,
               color: bottomNavBarColor,
               borderRadius: 6,
               altWidget: Row(
@@ -35,15 +39,16 @@ class TasksList extends StatelessWidget {
                   IconButton(onPressed: (){},icon: Icon(CupertinoIcons.chevron_down,color: customBorderColor,))
                 ],),),
             SizedBox(height: height*0.02,),
-            bloc.taskList.isNotEmpty?Expanded(
+            missionList.isNotEmpty?Expanded(
               flex: 2,
               child: ListView.separated(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context,index){
-                    return TaskItem(height: height, width: width,model: bloc.taskList[index],
-                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: true, index: index));},
-                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: false, index: index));}
+                    return TaskItem(height: height, width: width,model: missionList[index],
+                      taskQuery: bloc.querySearch,
+                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: true, taskID:missionList[index].taskID));},
+                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: false, taskID:missionList[index].taskID));}
                       ,);
                   },
                   separatorBuilder: (context,index){
@@ -51,11 +56,12 @@ class TasksList extends StatelessWidget {
                       height: height*0.02,
                     );
                   },
-                  itemCount: bloc.taskList.length),
-            )
-                :const SizedBox(),
+                  itemCount: missionList.length),
+            ) :
+            Text("No Tasks Exist",style: CustomTextStyle.fontBold18,),
             SizedBox(height: height*0.02,),
             CustomBigButton(
+              altWidth: width*0.33,
               color: bottomNavBarColor,
               borderRadius: 6,
               altWidget: Row(
@@ -65,14 +71,16 @@ class TasksList extends StatelessWidget {
                   IconButton(onPressed: (){},icon: Icon(CupertinoIcons.chevron_down,color: customBorderColor,))
                 ],),),
             SizedBox(height: height*0.02,),
-            bloc.completedList.isNotEmpty?Expanded(
+            completeList.isNotEmpty?Expanded(
               child: ListView.separated(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context,index){
-                    return TaskItem(height: height, width: width,model: bloc.completedList[index],
-                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: false, index: index));},
-                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: true, index: index));},
+                    return TaskItem(
+                      taskQuery: bloc.querySearch,
+                      height: height, width: width,model: completeList[index],
+                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: false, taskID: completeList[index].taskID));},
+                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: true, taskID: completeList[index].taskID));},
                     );
                   },
                   separatorBuilder: (context,index){
@@ -80,9 +88,9 @@ class TasksList extends StatelessWidget {
                       height: height*0.02,
                     );
                   },
-                  itemCount: bloc.completedList.length),
+                  itemCount: completeList.length),
             ):
-            const SizedBox(),
+            Text("No Tasks Exist",style: CustomTextStyle.fontBold18,),
           ],
         ),
       ),
