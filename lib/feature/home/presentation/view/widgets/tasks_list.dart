@@ -36,10 +36,12 @@ class TasksList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Mission",style: CustomTextStyle.fontBoldWhite16,),
-                  IconButton(onPressed: (){},icon: Icon(CupertinoIcons.chevron_down,color: customBorderColor,))
+                  IconButton(onPressed: (){
+                    bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.mission));
+                  },icon: Icon(bloc.showMission?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,))
                 ],),),
             SizedBox(height: height*0.02,),
-            missionList.isNotEmpty?Expanded(
+            (missionList.isNotEmpty&&bloc.showMission)?Expanded(
               flex: 2,
               child: ListView.separated(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -68,10 +70,12 @@ class TasksList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Completed",style: CustomTextStyle.fontBoldWhite16,),
-                  IconButton(onPressed: (){},icon: Icon(CupertinoIcons.chevron_down,color: customBorderColor,))
+                  IconButton(onPressed: (){
+                    bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.complete));
+                  },icon: Icon(bloc.showComplete?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,))
                 ],),),
             SizedBox(height: height*0.02,),
-            completeList.isNotEmpty?Expanded(
+            (completeList.isNotEmpty&&bloc.showComplete)?Expanded(
               child: ListView.separated(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   physics: const BouncingScrollPhysics(),

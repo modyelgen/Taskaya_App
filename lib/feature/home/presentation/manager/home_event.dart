@@ -50,3 +50,8 @@ final class SearchInTasksEvent extends HomeEvent {
   final String query;
   SearchInTasksEvent({this.query=""});
 }
+
+final class ChangeShowOfTaskEvent extends HomeEvent {
+  final TaskTypesShowing type;
+  ChangeShowOfTaskEvent({required this.type});
+}

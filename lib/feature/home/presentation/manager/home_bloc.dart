@@ -19,6 +19,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool pickPriority=false;
   String name='';
   String querySearch='';
+  bool showMission=true;
+  bool showComplete=true;
   late Database taskDb;
   String profilePicPath='null';
   List<CategoryModel>categoryList=[];
@@ -65,6 +67,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           break;
         case SearchInTasksEvent():
           await searchInTask(emit: emit, query: event.query);
+          break;
+
+        case ChangeShowOfTaskEvent():
+          await changeShowOfTasks(emit: emit, type: event.type);
+          break;
       }
     });
   }
@@ -320,4 +327,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
     emit(ChangeTaskAccordingToSearchState());
   }
+
+  Future<void>changeShowOfTasks({required Emitter<HomeState>emit,required TaskTypesShowing type})async{
+    switch(type){
+      case TaskTypesShowing.mission:
+        showMission=!showMission;
+        emit(ChangeShowOfTaskState());
+        break;
+      case TaskTypesShowing.complete:
+        showComplete=!showComplete;
+        emit(ChangeShowOfTaskState());
+        break;
+    }
+
+  }
 }
+enum TaskTypesShowing {mission,complete}
