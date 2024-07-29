@@ -28,11 +28,11 @@ class AddTaskPop extends StatelessWidget {
           Text("Add Task",style: CustomTextStyle.fontBoldWhite16,),
           SizedBox(
             height: height*0.06,
-            child: const CustomTextFormField(label: "Task",enableNormalBorder: false,enableEnabledBorder: false,border: 8,),
+            child: CustomTextFormField(label: "Task",enableNormalBorder: false,style: CustomTextStyle.fontNormal16.copyWith(color: Colors.white),enableEnabledBorder: false,border: 8,borderWidth: 1,controller: bloc.taskController,),
           ),
           SizedBox(
             height: height*0.06,
-            child: const CustomTextFormField(label: "Description",enableNormalBorder: false,enableEnabledBorder: false,border: 8,),
+            child: CustomTextFormField(label: "Description",style: CustomTextStyle.fontNormal14.copyWith(color: Colors.white),enableNormalBorder: false,enableEnabledBorder: false,border: 8,borderWidth: 1,controller: bloc.describeController),
           ),
           SizedBox(
             height: height*0.015,
@@ -42,25 +42,31 @@ class AddTaskPop extends StatelessWidget {
               IconButton(
                   onPressed: ()async{
                     await showDatePicker(
-                      context: context, firstDate: DateTime.now(),
+                      context: context,
+                      barrierDismissible: false,
+                      firstDate: DateTime.now(),
                       confirmText: "Choose Time",
                       cancelText: "Cancel",
-                      lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((value)async{
-                        if(value!=null){
-                          await showTimePicker(context: context, initialTime: TimeOfDay.now(),);
+                      initialDate:bloc.taskTimeModel?.dayDate??DateTime.now(),
+                      lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((dayValue)async{
+                        if(dayValue!=null){
+                          await showTimePicker(context: context,barrierDismissible: false,initialTime:bloc.taskTimeModel?.dayHourMinute??TimeOfDay.now(),).then((hourValue){
+                            if(hourValue!=null){
+                              bloc.changeDayTime(dayTime:dayValue,hourTime:hourValue);
+                            }
+                          });
                         }
                       });
-              },icon:const Icon(Icons.timer_sharp),tooltip: " Task Time",),
+              },icon:Icon(Icons.timer_sharp,color:customBorderColor),tooltip: " Task Time",),
 
               IconButton(onPressed: ()async{
-                //bloc.add(ChangeEnablePickCategoryEvent());
-               await showGeneralDialog(
+                await showGeneralDialog(
                     context: context,
                     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
                     pageBuilder: (context,animation,ani){
                   return Center(child: TaskCategory(height: height, width: width,bloc: bloc,));
                 });
-              },icon:const Icon(CupertinoIcons.tags,)),
+              },icon:Icon(CupertinoIcons.tags,color: customBorderColor,),tooltip: "Task Category",),
 
               IconButton(onPressed: ()async{
                 await showGeneralDialog(
@@ -69,12 +75,15 @@ class AddTaskPop extends StatelessWidget {
                     pageBuilder: (context,Animation sec,Animation pr){
                       return Center(child: TaskPriority(height: height, width: width,bloc:bloc));
                 });
-              },icon:const Icon(CupertinoIcons.flag)),
+              },icon:Icon(CupertinoIcons.flag,color:customBorderColor),tooltip: "Task Priority",),
 
               const Spacer(),
               Transform.rotate(
                   angle: 45 * 3.1415927 / 180,
-                  child:Icon(CupertinoIcons.paperplane,color: buttonColor,))
+                  child:IconButton(onPressed: (){
+                    bloc.add(CreateNewTaskEvent());
+                    Navigator.pop(context);
+                  },icon:Icon(CupertinoIcons.paperplane,color: buttonColor,)))
             ],
           ),
         ],

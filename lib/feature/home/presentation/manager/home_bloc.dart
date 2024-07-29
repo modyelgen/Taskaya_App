@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
+
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:taskaya/core/utilites/cache_helper/file_caching_helper.dart';
 import 'package:taskaya/core/utilites/constants/parameters.dart';
 import 'package:taskaya/feature/home/data/models/task_model.dart';
+import 'package:uuid/uuid.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
@@ -12,12 +15,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   int bottomNavCurrIndex=0;
   bool isLoading=false;
   bool canPoop=false;
+  bool pickCategory=false;
+  bool pickPriority=false;
   String name='';
-  OverlayEntry?overlayEntry;
+  late Database taskDb;
   String profilePicPath='null';
   List<CategoryModel>categoryList=[];
-  int currFlag=0;
-  Icon? tempIcon;
+  TextEditingController taskController=TextEditingController();
+  TextEditingController describeController=TextEditingController();
+  int? currFlag;
+  int? currCategory;
+  TaskTimeModel?taskTimeModel;
+  List<TaskModel>taskList=[];
+  List<TaskModel>completedList=[];
   HomeBloc() : super(HomeInitialState()){
     on<HomeEvent>((event, emit) async{
       switch(event){
@@ -32,10 +42,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await createNewCategory(emit: emit, model: event.model);
           break;
         case ChangeCurrFlagIndexEvent():
-          await changeCurrFlag(emit: emit,index: event.index);
+          await changeCurrFlag(emit: emit,index: event.index,pick: event.pick);
           break;
         case AllowToPopEvent():
           await allowToPoop(allow: event.allow, emit: emit);
+          break;
+        case ChangeCurrCategoryIndexEvent():
+          await changeCurrCategory(index: event.index, emit: emit,pick: event.pick);
+          break;
+        case CreateNewTaskEvent():
+          await createNewTask(emit);
+          break;
+        case MoveTaskEvent():
+          await moveTask(index: event.index, toComplete: event.toComplete, emit: emit);
+          break;
+        case LoadTaskEvent():
+          await loadTaskList(emit: emit);
+          break;
+        case RemoveTaskEvent():
+          await deleteTask(index: event.index, complete: event.isComplete, emit: emit);
           break;
       }
     });
@@ -48,11 +73,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           name=value.first['name'];
         });
       });
-      isLoading=false;
       emit(LoadCustomDataSuccess());
     }
     catch(e){
-      isLoading=false;
       emit(LoadCustomDataFailed(errMessage: e.toString()));
     }
   }
@@ -81,11 +104,72 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         FileCacheHelper().getData(database: value, tableName: "data").then((value) {
           if(value.isNotEmpty){
             for(var item in value){
-              categoryList.add(CategoryModel.fromJson(item));
+              categoryList.add(CategoryModel.fromCategory(item));
             }
           }
         });
       });
+    }
+  }
+
+  Future<void> loadTaskList({required Emitter<HomeState>emit})async{
+    if( ! await FileCacheHelper().checkOfExistOfDb(path: tasksListDb)){
+      try{
+        isLoading=true;
+        emit(LoadingLoadTaskListState());
+        await openDatabase(tasksListDb,
+          version: 1,
+          onCreate: (database,version){
+            return database.execute(
+              'CREATE TABLE tasks('
+                  'taskID TEXT PRIMARY KEY, '
+                  'taskName TEXT, '
+                  'taskDescription TEXT, '
+                  'priority INTEGER, '
+                  'taskTime TEXT, ' // store JSON string
+                  'taskCategory TEXT, ' // store JSON string
+                  'completed INTEGER'
+                  ')',
+            );
+          },).then((value){
+            taskDb=value;
+        });
+        isLoading=false;
+        emit(SuccessLoadTaskListState());
+      }
+      catch(e){
+        isLoading=false;
+        emit(FailureLoadTaskListState(errMessage: e.toString()));
+      }
+
+    }
+    else{
+      try{
+        isLoading=true;
+        emit(LoadingLoadTaskListState());
+         await openDatabase(tasksListDb).then((value) {
+           taskDb=value;
+           FileCacheHelper().getData(database: value, tableName: "tasks").then((value) {
+            if(value.isNotEmpty){
+              for(var item in value){
+                if(item['completed']==0){
+                  taskList.add(TaskModel.fromMap(item));
+                }
+                else{
+                  completedList.add(TaskModel.fromMap(item));
+                }
+              }
+            }
+          });
+        });
+        isLoading=false;
+        emit(SuccessLoadTaskListState());
+      }
+      catch(e){
+        isLoading=false;
+        emit(FailureLoadTaskListState(errMessage: e.toString()));
+      }
+
     }
   }
 
@@ -104,13 +188,139 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void>changeCurrFlag({required int index,required Emitter<HomeState>emit})async{
-   currFlag=index;
-   emit(ChangeFlagIndexState());
+  Future<void>createNewTask(Emitter<HomeState>emit)async{
+    if(taskController.text.isNotEmpty&&taskController.text.trim().isNotEmpty){
+      var uuid = const Uuid();
+      String id = uuid.v4();
+      taskList.add(TaskModel(
+        taskID: id,
+        taskName: taskController.text,
+        taskDescription: taskController.text,
+        taskCategory: pickCategory?categoryList[currCategory??0]:null,
+        priority: pickPriority?currFlag:null,
+        taskTime: taskTimeModel==null?null:TaskTimeModel(dayDate:taskTimeModel?.dayDate,dayHourMinute:taskTimeModel?.dayHourMinute),
+      ));
+      await saveTaskIntoDb(model: taskList.last);
+      emit(SuccessAddNewTaskState());
+      cleanModelAfter();
+
+    }
+  }
+
+  Future<void>changeCurrFlag({required int index,required Emitter<HomeState>emit,required bool pick})async{
+    if(pick){
+      currFlag=index;
+      pickPriority=pick;
+      emit(ChangeFlagIndexState());
+    }
+    else{
+      currFlag=index;
+      pickPriority=pick;
+      emit(ChangeFlagIndexState());
+    }
+  }
+
+  Future<void>changeCurrCategory({required int index,required bool pick,required Emitter<HomeState>emit})async{
+    if(pick){
+      currCategory=index;
+      pickCategory=pick;
+      emit(ChangeCategoryIndexState());
+    }
+    else{
+      currCategory=index;
+      emit(ChangeCategoryIndexState());
+    }
+
+  }
+
+  Future<void>moveTask({required int index,required bool toComplete,required Emitter<HomeState>emit})async{
+    if(toComplete){
+      taskList[index].completed=1;
+      await updateTaskAtDb(task:taskList[index]);
+      completedList.insert(0, taskList[index]);
+      taskList.removeAt(index);
+
+    }
+    else{
+      completedList[index].completed=0;
+      await updateTaskAtDb(task: completedList.last);
+      taskList.add(completedList[index]);
+      completedList.removeAt(index);
+    }
+    emit(MoveTaskState());
   }
 
   Future<void>allowToPoop({required bool allow,required Emitter<HomeState>emit})async{
    canPoop=allow;
    emit(ChangeNavigationToPopState());
+  }
+
+  List<Color>getOldColor(){
+    List<Color>tempList=[];
+    if(categoryList.isEmpty){
+      return tempList;
+    }
+    else{
+    for(var item in categoryList){
+      tempList.add(item.color!);
+    }
+    return tempList;
+    }
+
+  }
+
+  void changeDayTime({DateTime? dayTime,TimeOfDay?hourTime}){
+    taskTimeModel=TaskTimeModel(dayDate: dayTime,dayHourMinute: hourTime);
+  }
+
+  void cleanModelAfter(){
+    taskController.clear();
+    currFlag=null;
+    pickPriority=false;
+    pickCategory=false;
+    currCategory=null;
+    describeController.clear();
+    taskTimeModel=null;
+  }
+
+  Future<void> saveTaskIntoDb({required TaskModel model})async{
+    try{
+      await taskDb.insert(
+        'tasks',
+        model.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    catch(e){
+      log(e.toString());
+    }
+  }
+
+  Future<void> deleteTask({required int index,required bool complete,required Emitter<HomeState>emit})async{
+    String taskID='';
+    if(complete){
+      taskID=completedList[index].taskID;
+      completedList.removeAt(index);
+
+    }
+    else{
+      taskID=taskList[index].taskID;
+      taskList.removeAt(index);
+    }
+    emit(RemoveTaskState());
+    await taskDb.delete(
+      'tasks',
+      where: 'taskID = ?',
+      whereArgs: [taskID],
+    );
+  }
+
+  Future<void> updateTaskAtDb({required TaskModel task})async{
+    await taskDb.update(
+      'tasks',
+      task.toMap(),
+      where: 'taskID = ?',
+      whereArgs: [task.taskID],
+    );
   }
 }

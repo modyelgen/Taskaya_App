@@ -21,7 +21,7 @@ class HomeView extends StatelessWidget {
     final double width = BasicDimension.screenWidth(context);
     final double height = BasicDimension.screenHeight(context);
     return BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc()..add(LoadCustomDataEvent()),  // Create the bloc here
+      create: (context) => HomeBloc()..add(LoadCustomDataEvent())..add(LoadTaskEvent()),  // Create the bloc here
       child: BlocConsumer<HomeBloc, HomeState>(
         listener: (context, state) {
           // Handle state changes

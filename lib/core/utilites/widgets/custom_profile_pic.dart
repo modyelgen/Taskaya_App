@@ -20,14 +20,8 @@ class SmallProfilePic extends StatelessWidget {
       backgroundImage:profilePath != "null"
           ? FileImage(File(profilePath))
           : const AssetImage("assets/home/default_profile.png") as ImageProvider,
-      backgroundColor: purpleColor,
+      backgroundColor: buttonColor,
       radius: width*0.06,
-      // child:Center(
-      //     child: Image.network(
-      //       errorBuilder:(context,_,m){
-      //         return const Icon(Icons.warning,color: closeColor,);
-      //         },
-      //   SetAppState.prefs?.getString('profileUrl')??"",fit: BoxFit.fill,width: width*0.06,height: width*0.06,))
     );
   }
 }

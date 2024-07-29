@@ -6,6 +6,8 @@ import 'package:taskaya/core/utilites/custom_localization/custom_app_localizatio
 import 'package:taskaya/core/utilites/widgets/custom_profile_pic.dart';
 import 'package:taskaya/core/utilites/widgets/custom_text_form_field.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/empty_task.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/tasks_list.dart';
 class HomeBody extends StatelessWidget {
   const HomeBody({
     super.key,
@@ -28,6 +30,7 @@ class HomeBody extends StatelessWidget {
         vertical: height * 0.015,
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -41,24 +44,16 @@ class HomeBody extends StatelessWidget {
             ],
           ),
           SizedBox(height: height*0.02,),
-          SizedBox(
-            //height: height*0.06,
-              child: CustomTextFormField(borderColor: customBorderColor,borderWidth: 0.8,border: 8,suffix: const Icon(CupertinoIcons.search),label: "searchLabel".tr(context),)),
+          CustomTextFormField(borderColor: customBorderColor,borderWidth: 0.8,border: 8,suffix: const Icon(CupertinoIcons.search),label: "searchLabel".tr(context),),
           SizedBox(height: height*0.015,),
-          Image.asset("assets/home/empty_tasks.png",fit: BoxFit.fitHeight,width: width,height: height*0.25,),
-          SizedBox(height: height*0.015,),
-          Column(
-            children: [
-              Text("emptyTaskTitle".tr(context),style: CustomTextStyle.fontBold21,),
-              SizedBox(height: height*0.009,),
-              Text("emptyTaskSec".tr(context),style: CustomTextStyle.fontBold16,),
-            ],
-          ),
-          SizedBox(
-            child: bloc.tempIcon,
-          ),
+          bloc.taskList.isEmpty&&bloc.completedList.isEmpty?
+          EmptyTasks(width: width, height: height):
+          TasksList(height: height, width: width,bloc: bloc,),
         ],
       ),
     );
   }
 }
+
+
+

@@ -12,7 +12,7 @@ class PriorityItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: width*0.06,vertical: height*0.015),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: width*0.05,vertical: height*0.015),
       decoration: BoxDecoration(
         color:curr?buttonColor:const Color(0xff272727),
         borderRadius: BorderRadius.circular(4),

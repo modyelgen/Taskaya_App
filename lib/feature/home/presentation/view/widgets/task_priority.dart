@@ -13,68 +13,74 @@ class TaskPriority extends StatelessWidget {
   final HomeBloc bloc;
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        height: height*0.5,
-        padding:const EdgeInsetsDirectional.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: bottomNavBarColor,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Task Priority",style: CustomTextStyle.fontBoldWhite16),
-            SizedBox(
-              width: width*0.9,
-              child: Divider(
-                thickness: 1,
-                color: customBorderColor,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Material(
+        color: bottomNavBarColor,
+        child: Container(
+          width: width*0.9,
+          height: height*0.5,
+          padding:const EdgeInsetsDirectional.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: bottomNavBarColor,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Task Priority",style: CustomTextStyle.fontBoldWhite16),
+              SizedBox(
+                width: width*0.75,
+                child: Divider(
+                  thickness: 1,
+                  color: customBorderColor,
+                ),
               ),
-            ),
-            SizedBox(height: height*0.015,),
-            BlocBuilder<HomeBloc,HomeState>(
-              bloc: bloc,
-              builder: (context,state) {
-                return Wrap(
-                  spacing: height*0.02,
-                  runSpacing: width*0.05,
+              SizedBox(height: height*0.015,),
+              BlocBuilder<HomeBloc,HomeState>(
+                bloc: bloc,
+                builder: (context,state) {
+                  return Wrap(
+                    spacing: height*0.02,
+                    runSpacing: width*0.05,
+                    children: [
+                      ...List.generate(10, (index)=>GestureDetector(
+                          onTap: (){
+                            bloc.add(ChangeCurrFlagIndexEvent(index: index,pick: false));
+                          },
+                          child: PriorityItem(index: index,width: width,height: height,curr: index==bloc.currFlag,)))
+                    ],
+                  );
+                }
+              ),
+              SizedBox(height: height*0.015,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ...List.generate(10, (index)=>GestureDetector(
-                        onTap: (){
-                          bloc.add(ChangeCurrFlagIndexEvent(index: index));
-                        },
-                        child: PriorityItem(index: index,width: width,height: height,curr: index==bloc.currFlag,)))
-                  ],
-                );
-              }
-            ),
-            SizedBox(height: height*0.015,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: width*0.025,
-                  ),
-                  TextButton(onPressed: (){
-                    Navigator.pop(context);
-                  },child:Text("Cancel",style: CustomTextStyle.fontBold16.copyWith(color: buttonColor,decoration: TextDecoration.none),)),
-                  CustomBigButton(
-                    labelStyle: CustomTextStyle.fontBold18.copyWith(color: Colors.white),
-                    label: "Save",
-                    onTap: (){
+                    SizedBox(
+                      width: width*0.025,
+                    ),
+                    TextButton(onPressed: (){
+                      bloc.add(ChangeCurrFlagIndexEvent(index: 0,pick: false));
                       Navigator.pop(context);
-                    },
-                    borderRadius: 8,
-                    color: buttonColor,
-                    altWidth: width*0.4,
-                  ),
-                ],
-              ),
-            )
-          ],
+                    },child:Text("Cancel",style: CustomTextStyle.fontBold16.copyWith(color: buttonColor,decoration: TextDecoration.none),)),
+                    CustomBigButton(
+                      labelStyle: CustomTextStyle.fontBold18.copyWith(color: Colors.white),
+                      label: "Save",
+                      onTap: (){
+                        bloc.add(ChangeCurrFlagIndexEvent(index: bloc.currFlag??0,pick: true));
+                        Navigator.pop(context);
+                      },
+                      borderRadius: 8,
+                      color: buttonColor,
+                      altWidth: width*0.4,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

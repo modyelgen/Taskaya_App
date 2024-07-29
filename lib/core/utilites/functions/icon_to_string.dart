@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 IconData stringToIconData({required String iconString}) {
   List<String> parts = iconString.split(',');
@@ -9,5 +10,9 @@ IconData stringToIconData({required String iconString}) {
 }
 String iconDataToString({required IconData iconData})
 {
-  return '${iconData.fontFamily},${iconData.codePoint}';
+  return '${iconData.fontFamily},${iconData.codePoint.toString()}';
+}
+String? getFormattedDay(DateTime?value){
+
+return value !=null ?DateFormat('EEEE, MMMM d').format(value):null;
 }
