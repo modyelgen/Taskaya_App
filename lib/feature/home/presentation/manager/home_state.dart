@@ -39,6 +39,8 @@ final class RemoveTaskState extends HomeState {}
 
 final class ChangeTaskAccordingToSearchState extends HomeState {}
 
+final class UpdateTaskHomeState extends HomeState {}
+
 final class ChangeShowOfTaskState extends HomeState {}
 
 final class LoadingLoadTaskListState extends HomeState {}

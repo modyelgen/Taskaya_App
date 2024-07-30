@@ -23,7 +23,6 @@ class TaskCategory extends StatelessWidget {
           width: width*0.9,
           height: height*0.5,
           decoration: BoxDecoration(
-            //borderRadius: BorderRadius.circular(8),
             color: bottomNavBarColor,
           ),
           child: Column(
@@ -81,7 +80,7 @@ class TaskCategory extends StatelessWidget {
                 bloc.currCategory!=null?
                 bloc.add(ChangeCurrCategoryIndexEvent(index: bloc.currCategory!,pick: true))
                     :null;
-                Navigator.pop(context);
+                Navigator.pop(context,bloc.categoryList[bloc.currCategory!]);
               },)
             ],
           ),

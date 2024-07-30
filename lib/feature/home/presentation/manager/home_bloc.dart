@@ -63,7 +63,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           await loadTaskList(emit: emit);
           break;
         case RemoveTaskEvent():
-          await deleteTask(taskID: event.taskID, complete: event.isComplete, emit: emit);
+          await deleteTask(taskID: event.taskID, emit: emit);
           break;
         case SearchInTasksEvent():
           await searchInTask(emit: emit, query: event.query);
@@ -71,6 +71,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
         case ChangeShowOfTaskEvent():
           await changeShowOfTasks(emit: emit, type: event.type);
+          break;
+        case UpdateTaskEvent():
+          await updateTask(model: event.model, emit: emit);
           break;
       }
     });
@@ -201,12 +204,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       taskList.add(TaskModel(
         taskID: id,
         taskName: taskController.text,
-        taskDescription: taskController.text,
+        taskDescription: describeController.text,
         taskCategory: pickCategory?categoryList[currCategory??0]:null,
         priority: pickPriority?currFlag:null,
         taskTime: taskTimeModel==null?null:TaskTimeModel(dayDate:taskTimeModel?.dayDate,dayHourMinute:taskTimeModel?.dayHourMinute),
       ));
       await saveTaskIntoDb(model: taskList.last);
+      filteredList=List.from(taskList);
       emit(SuccessAddNewTaskState());
       cleanModelAfter();
 
@@ -239,6 +243,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   }
 
+
   Future<void>moveTask({required String taskID,required bool toComplete,required Emitter<HomeState>emit})async{
     if(toComplete){
       taskList.where((model)=>model.taskID==taskID).first.completed=1;
@@ -247,6 +252,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       taskList.where((model)=>model.taskID==taskID).first.completed=0;
     }
     emit(MoveTaskState());
+    updateTaskAtDb(task: taskList.where((model)=>model.taskID==taskID).first);
+  }
+
+  Future<void>updateTask({required TaskModel model,required Emitter<HomeState>emit})async{
+    int index=taskList.indexWhere((task)=>model.taskID==task.taskID);
+    taskList[index]=model;
+    filteredList=List.from(taskList);
+    emit(UpdateTaskHomeState());
+    updateTaskAtDb(task: model);
   }
 
   Future<void>allowToPoop({required bool allow,required Emitter<HomeState>emit})async{
@@ -295,8 +309,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void> deleteTask({required String taskID,required bool complete,required Emitter<HomeState>emit})async{
+  Future<void> deleteTask({required String taskID,required Emitter<HomeState>emit})async{
     taskList.removeWhere((model)=>model.taskID==taskID);
+    filteredList=List.from(taskList);
     emit(RemoveTaskState());
     await taskDb.delete(
       'tasks',
@@ -306,6 +321,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> updateTaskAtDb({required TaskModel task})async{
+
     await taskDb.update(
       'tasks',
       task.toMap(),

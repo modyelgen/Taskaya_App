@@ -35,8 +35,7 @@ final class MoveTaskEvent extends HomeEvent {
 }
 final class RemoveTaskEvent extends HomeEvent {
   final String taskID;
-  final bool isComplete;
-  RemoveTaskEvent({required this.isComplete,required this.taskID});
+  RemoveTaskEvent({required this.taskID});
 }
 
 final class LoadTaskEvent extends HomeEvent {}
@@ -54,4 +53,8 @@ final class SearchInTasksEvent extends HomeEvent {
 final class ChangeShowOfTaskEvent extends HomeEvent {
   final TaskTypesShowing type;
   ChangeShowOfTaskEvent({required this.type});
+}
+final class UpdateTaskEvent extends HomeEvent {
+  final TaskModel model;
+  UpdateTaskEvent({required this.model});
 }

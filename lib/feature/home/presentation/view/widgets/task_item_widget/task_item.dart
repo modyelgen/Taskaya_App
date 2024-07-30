@@ -5,19 +5,19 @@ import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 import 'package:taskaya/core/utilites/widgets/warning_option.dart';
 import 'package:taskaya/feature/home/data/models/task_model.dart';
-import 'package:taskaya/feature/home/presentation/view/widgets/edit_task.dart';
+import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
+import 'package:taskaya/feature/home/presentation/view/widgets/edit_task_widgets/edit_task.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/one_category_in_task.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/one_priority_in_task.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_item_widget/one_time_in_task.dart';
 
 class TaskItem extends StatelessWidget {
-  const TaskItem({super.key,required this.height,required this.width,required this.model,this.removeTask,this.moveTask,this.taskQuery=''});
+  const TaskItem({super.key,required this.height,required this.width,required this.model,required this.bloc});
   final double width;
   final double height;
   final TaskModel model;
-  final String taskQuery;
-  final void Function()?removeTask;
-  final void Function()?moveTask;
+  final HomeBloc bloc;
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -27,15 +27,13 @@ class TaskItem extends StatelessWidget {
         return confirm;
       },
       onDismissed: (direction){
-        removeTask==null?null:removeTask!();
+        bloc.add(RemoveTaskEvent(taskID:model.taskID));
       },
       direction: DismissDirection.startToEnd,
       background: CustomBigButton(altWidth: width,color: deleteColor,borderRadius: 8,altWidget:const IconButton(onPressed: null,icon:Icon(Icons.delete,color: Colors.white,)),mainAxisAlignment: MainAxisAlignment.start,),
       child: GestureDetector(
         onTap: (){
-          showGeneralDialog(context: context, pageBuilder: (context,anu,an){
-            return EditTaskView(width: width, height: height,model: model,);
-          });
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>EditTaskView(width: width, height: height,model: model,bloc: bloc,)));
         },
         child: Container(
           padding: EdgeInsetsDirectional.all(width*0.01),
@@ -50,7 +48,9 @@ class TaskItem extends StatelessWidget {
             children: [
               SizedBox(
                   width: width*0.1,
-                  child: IconButton(onPressed: moveTask, icon: Icon(model.completed==0?CupertinoIcons.circle:CupertinoIcons.checkmark_circle,color:customBorderColor ,))),
+                  child: IconButton(onPressed: (){
+                    bloc.add(MoveTaskEvent(toComplete: model.completed==0, taskID:model.taskID));
+                  }, icon: Icon(model.completed==0?CupertinoIcons.circle:CupertinoIcons.checkmark_circle,color:customBorderColor ,))),
               Expanded(
                 child: SizedBox(
                   width: width*0.75,
@@ -60,7 +60,7 @@ class TaskItem extends StatelessWidget {
                     children: [
                       SizedBox(
                           width: width*0.7,
-                          child:TaskItemTextWithSearchedQuery(taskText: model.taskName, taskQuery: taskQuery,),),
+                          child:TaskItemTextWithSearchedQuery(taskText: model.taskName, taskQuery: bloc.querySearch,),),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

@@ -5,9 +5,13 @@ class CalendarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Calendar is Here"),
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(
+              height: 300,
+              child: CalendarDatePicker(initialDate: DateTime.now(), firstDate: DateTime.now(), lastDate: DateTime(2024,9), onDateChanged: (d){})),
+        ],
       ),
     );
   }

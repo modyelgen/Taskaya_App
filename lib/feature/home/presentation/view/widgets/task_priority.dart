@@ -63,14 +63,14 @@ class TaskPriority extends StatelessWidget {
                     ),
                     TextButton(onPressed: (){
                       bloc.add(ChangeCurrFlagIndexEvent(index: 0,pick: false));
-                      Navigator.pop(context);
+                      Navigator.pop(context,null);
                     },child:Text("Cancel",style: CustomTextStyle.fontBold16.copyWith(color: buttonColor,decoration: TextDecoration.none),)),
                     CustomBigButton(
                       labelStyle: CustomTextStyle.fontBold18.copyWith(color: Colors.white),
                       label: "Save",
                       onTap: (){
                         bloc.add(ChangeCurrFlagIndexEvent(index: bloc.currFlag??0,pick: true));
-                        Navigator.pop(context);
+                        Navigator.pop(context,bloc.currFlag);
                       },
                       borderRadius: 8,
                       color: buttonColor,
@@ -86,4 +86,3 @@ class TaskPriority extends StatelessWidget {
     );
   }
 }
-

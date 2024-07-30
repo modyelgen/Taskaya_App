@@ -48,10 +48,8 @@ class TasksList extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context,index){
                     return TaskItem(height: height, width: width,model: missionList[index],
-                      taskQuery: bloc.querySearch,
-                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: true, taskID:missionList[index].taskID));},
-                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: false, taskID:missionList[index].taskID));}
-                      ,);
+                      bloc:bloc,
+                    );
                   },
                   separatorBuilder: (context,index){
                     return SizedBox(
@@ -81,10 +79,9 @@ class TasksList extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context,index){
                     return TaskItem(
-                      taskQuery: bloc.querySearch,
+                      bloc:bloc,
                       height: height, width: width,model: completeList[index],
-                      moveTask: (){bloc.add(MoveTaskEvent(toComplete: false, taskID: completeList[index].taskID));},
-                      removeTask: (){bloc.add(RemoveTaskEvent(isComplete: true, taskID: completeList[index].taskID));},
+
                     );
                   },
                   separatorBuilder: (context,index){

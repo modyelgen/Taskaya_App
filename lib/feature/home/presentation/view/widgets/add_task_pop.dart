@@ -4,6 +4,7 @@ import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/widgets/custom_text_form_field.dart';
 import 'package:taskaya/core/utilites/widgets/leave_app.dart';
+import 'package:taskaya/feature/home/data/models/task_model.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_category.dart';
 import 'package:taskaya/feature/home/presentation/view/widgets/task_priority.dart';
@@ -61,21 +62,11 @@ class AddTaskPop extends StatelessWidget {
               },icon:Icon(Icons.timer_sharp,color:customBorderColor),tooltip: " Task Time",),
 
               IconButton(onPressed: ()async{
-                await showGeneralDialog(
-                    context: context,
-                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                    pageBuilder: (context,animation,ani){
-                  return Center(child: TaskCategory(height: height, width: width,bloc: bloc,));
-                });
+                await showCategoryPicker(context: context, bloc: bloc, height: height, width: width);
               },icon:Icon(CupertinoIcons.tags,color: customBorderColor,),tooltip: "Task Category",),
 
               IconButton(onPressed: ()async{
-                await showGeneralDialog(
-                    context: context,
-                    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-                    pageBuilder: (context,Animation sec,Animation pr){
-                      return Center(child: TaskPriority(height: height, width: width,bloc:bloc));
-                });
+                await showPriorityPicker(context: context, bloc: bloc, height: height, width: width);
               },icon:Icon(CupertinoIcons.flag,color:customBorderColor),tooltip: "Task Priority",),
 
               const Spacer(),
@@ -89,4 +80,22 @@ class AddTaskPop extends StatelessWidget {
       ),
     );
   }
+
+}
+Future<CategoryModel?> showCategoryPicker({required BuildContext context,required HomeBloc bloc,required double height,required double width}) {
+  return showGeneralDialog(
+      context: context,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (context,animation,ani){
+        return Center(child: TaskCategory(height: height, width: width,bloc: bloc,));
+      });
+}
+
+Future<int?> showPriorityPicker({required BuildContext context,required HomeBloc bloc,required double height,required double width}) async {
+  return await showGeneralDialog(
+      context: context,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      pageBuilder: (context,Animation sec,Animation pr){
+        return Center(child: TaskPriority(height: height, width: width,bloc:bloc));
+      });
 }

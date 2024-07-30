@@ -23,6 +23,17 @@ class TaskModel{
       'taskID': taskID,
     };
   }
+  factory TaskModel.transfer({required TaskModel model}){
+    return TaskModel(
+      taskName:model.taskName,
+      taskID: model.taskID,
+      taskDescription: model.taskDescription,
+      taskCategory: model.taskCategory,
+      taskTime: model.taskTime,
+      completed: model.completed,
+      priority: model.priority,
+    );
+  }
 
   factory TaskModel.fromMap(Map<dynamic, dynamic> map) {
     return TaskModel(
