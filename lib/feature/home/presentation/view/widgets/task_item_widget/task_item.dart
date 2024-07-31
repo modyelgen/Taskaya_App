@@ -30,7 +30,7 @@ class TaskItem extends StatelessWidget {
         bloc.add(RemoveTaskEvent(taskID:model.taskID));
       },
       direction: DismissDirection.startToEnd,
-      background: CustomBigButton(altWidth: width,color: deleteColor,borderRadius: 8,altWidget:const IconButton(onPressed: null,icon:Icon(Icons.delete,color: Colors.white,)),mainAxisAlignment: MainAxisAlignment.start,),
+      background: CustomBigButton(altWidth: width,color: deleteColor,borderRadius: 8,altWidget:const Align(alignment: AlignmentDirectional.centerStart,child: IconButton(onPressed: null,icon:Icon(Icons.delete,color: Colors.white,))),mainAxisAlignment: MainAxisAlignment.start,),
       child: GestureDetector(
         onTap: (){
           Navigator.push(context, MaterialPageRoute(builder: (context)=>EditTaskView(width: width, height: height,model: model,bloc: bloc,)));

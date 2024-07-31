@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:taskaya/core/utilites/cache_helper/shared_pref.dart';
-import 'package:taskaya/feature/calendar/presentation/view/calendar_view.dart';
 import 'package:taskaya/feature/focus/presentation/view/foucs_view.dart';
 import 'package:taskaya/feature/home/presentation/view/home_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/on_boarding_view.dart';
@@ -40,12 +39,12 @@ class RouterApp {
           return const HomeView();
         },
       ),
-      GoRoute(
-        path: kCalendarView,
-        builder: (context, state) {
-          return const CalendarView();
-        },
-      ),
+      // GoRoute(
+      //   path: kCalendarView,
+      //   builder: (context, state) {
+      //     return const CalendarView();
+      //   },
+      // ),
       GoRoute(
         path: kFocusView,
         builder: (context, state) {

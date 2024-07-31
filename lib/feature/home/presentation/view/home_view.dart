@@ -48,11 +48,11 @@ class HomeView extends StatelessWidget {
                   height: height,
                   name: bloc.name,
                 ):null,
-                body: [HomeBody(width: width, bloc: bloc, height: height),const CalendarView(),const FocusView(),ProfileView(name:bloc.name,profilePath:bloc.profilePicPath)][bloc.bottomNavCurrIndex],
+                body: [HomeBody(width: width, bloc: bloc, height: height),CalendarView(taskList:bloc.taskList,homeBloc: bloc,),const FocusView(),ProfileView(name:bloc.name,profilePath:bloc.profilePicPath)][bloc.bottomNavCurrIndex],
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                 floatingActionButton:FloatingActionButton(
                   shape: const CircleBorder(),
-                  onPressed:bloc.bottomNavCurrIndex==0? ()async{
+                  onPressed:()async{
                     await showModalBottomSheet(context: context,
                         isScrollControlled: true,
                         isDismissible: false,
@@ -60,7 +60,7 @@ class HomeView extends StatelessWidget {
                           padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
                           child:AddTaskPop(height: height, width: width,bloc: bloc,),
                     ));
-                  }:null,
+                  },
                   backgroundColor: buttonColor,
                   child: Icon(
                     CupertinoIcons.add,
