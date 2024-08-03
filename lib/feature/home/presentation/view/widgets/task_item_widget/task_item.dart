@@ -50,7 +50,7 @@ class TaskItem extends StatelessWidget {
                   width: width*0.1,
                   child: IconButton(onPressed: (){
                     bloc.add(MoveTaskEvent(toComplete: model.completed==0, taskID:model.taskID));
-                  }, icon: Icon(model.completed==0?CupertinoIcons.circle:CupertinoIcons.checkmark_circle,color:customBorderColor ,))),
+                  }, icon: Icon(model.completed==0?CupertinoIcons.circle:CupertinoIcons.checkmark_circle,color:model.completed==0?customBorderColor:checkColor ,))),
               Expanded(
                 child: SizedBox(
                   width: width*0.75,
@@ -66,7 +66,7 @@ class TaskItem extends StatelessWidget {
                         children: [
                           SizedBox(
                               width: width*0.3,
-                              child:model.taskTime!=null?OneTextInTaskItem(model: model.taskTime!):null),
+                              child:model.taskTime!=null?OneTextInTaskItem(dateTime: model.taskTime!):null),
                           SizedBox(
                             width: width*0.4,
                             child: Row(

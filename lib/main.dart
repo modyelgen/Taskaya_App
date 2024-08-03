@@ -6,6 +6,7 @@ import 'package:taskaya/bloc_observer.dart';
 import 'package:taskaya/core/utilites/app_theme/mode_theme.dart';
 import 'package:taskaya/core/utilites/cache_helper/shared_pref.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
+import 'package:taskaya/core/utilites/functions/notification_handler/notification.dart';
 import 'package:taskaya/core/utilites/navigation/routers.dart';
 import 'package:taskaya/feature/home/presentation/view/home_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/on_boarding_view.dart';
@@ -17,6 +18,7 @@ void main()async{
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer=SimpleBlocObserver();
   await SetAppState.setShared();
+  await NotificationHandler().initNotification();
   runApp(const MyApp());
 }
 
@@ -78,6 +80,7 @@ class CustomMaterialApp extends StatelessWidget {
     );
   }
 }
+
 Widget getHomeWidget(OnBoardingArgument args){
   switch(checkIndex()){
     case FirstScreenEnum.onBoarding:

@@ -49,10 +49,10 @@ class AddTaskPop extends StatelessWidget {
                       firstDate: DateTime.now(),
                       confirmText: "Choose Time",
                       cancelText: "Cancel",
-                      initialDate:bloc.taskTimeModel?.dayDate??DateTime.now(),
+                      initialDate:bloc.taskTime??DateTime.now(),
                       lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((dayValue)async{
                         if(dayValue!=null){
-                          await showTimePicker(context: context,barrierDismissible: false,initialTime:bloc.taskTimeModel?.dayHourMinute??TimeOfDay.now(),).then((hourValue){
+                          await showTimePicker(context: context,barrierDismissible: false,initialTime:TimeOfDay.now(),).then((hourValue){
                             if(hourValue!=null){
                               bloc.changeDayTime(dayTime:dayValue,hourTime:hourValue);
                             }

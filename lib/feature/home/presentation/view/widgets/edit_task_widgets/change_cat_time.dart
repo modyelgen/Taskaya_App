@@ -40,13 +40,13 @@ class ChangeTimeCategoryPriority extends StatelessWidget {
                 await showDatePicker(
                   context: context,
                   barrierDismissible: false,
-                  firstDate: cubit.tempModel.taskTime?.dayDate??DateTime.now(),
+                  firstDate: cubit.tempModel.taskTime??DateTime.now(),
                   confirmText: "Choose Time",
                   cancelText: "Cancel",
-                  initialDate:cubit.tempModel.taskTime?.dayDate??DateTime.now(),
+                  initialDate:cubit.tempModel.taskTime??DateTime.now(),
                   lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((dayValue)async{
                   if(dayValue!=null){
-                    await showTimePicker(context: context,barrierDismissible: false,initialTime:cubit.tempModel.taskTime?.dayHourMinute??TimeOfDay.now(),).then((hourValue){
+                    await showTimePicker(context: context,barrierDismissible: false,initialTime:cubit.tempModel.taskTime==null?TimeOfDay.now():TimeOfDay(hour: cubit.tempModel.taskTime!.hour, minute: cubit.tempModel.taskTime!.minute),).then((hourValue){
                       if(hourValue!=null){
                         cubit.updateTime(dayTime: hourValue, date: dayValue);
                       }
@@ -54,7 +54,7 @@ class ChangeTimeCategoryPriority extends StatelessWidget {
                   }
                 });
               },
-              child:cubit.tempModel.taskTime!=null? CustomBigButton(altWidget:OneTextInTaskItem(model: cubit.tempModel.taskTime!),borderRadius: 6,altWidth: width*0.3,color: bottomNavBarColor,):
+              child:cubit.tempModel.taskTime!=null? CustomBigButton(altWidget:OneTextInTaskItem(dateTime: cubit.tempModel.taskTime!),borderRadius: 6,altWidth: width*0.3,color: bottomNavBarColor,):
               const AddButtonToTask(),),
           ),
           ListTile(

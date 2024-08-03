@@ -32,6 +32,7 @@ class WarningOption extends StatelessWidget {
     );
   }
 }
+
 Future<bool> showConfirmDialog(BuildContext context) async {
   return await showGeneralDialog<bool>(
     context: context,

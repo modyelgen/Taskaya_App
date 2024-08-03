@@ -27,9 +27,12 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
         case ChangeCurrMonthEvent():
           await updateCalendarDueToMonthChange(emit: emit, increase: event.forward);
           break;
-
         case ChangeDayPickerEvent():
           await pickDay(index: event.index, emit: emit);
+          break;
+        case RefreshCalendarListEvent():
+          await refreshCalendarList(emit: emit);
+          break;
       }
     });
   }
@@ -86,12 +89,17 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   void filterListAccordingToDay(){
     filteredList=List.from(filteredList=taskList.where((model){
       if(model.taskTime!=null){
-        if(model.taskTime?.dayDate==currentDate){
+        DateTime time=DateTime(model.taskTime!.year,model.taskTime!.month,model.taskTime!.day);
+        if(time==currentDate){
           return true;
         }
         return false;
       }
       return false;
     }).toList());
+  }
+
+  Future<void>refreshCalendarList({required Emitter<CalendarState>emit})async{
+    emit(RefreshListState());
   }
 }

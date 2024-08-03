@@ -16,7 +16,7 @@ class EditTaskCubit extends Cubit<EditTaskState> {
     emit(InitTaskState());
   }
   void updateTime({required TimeOfDay dayTime,required DateTime date}){
-    tempModel.taskTime=TaskTimeModel(dayDate: date,dayHourMinute: dayTime);
+    tempModel.taskTime=date.copyWith(hour:dayTime.hour ,minute:dayTime.minute);
     emit(UpdateTaskState());
   }
   void updateCategory({required CategoryModel model}){

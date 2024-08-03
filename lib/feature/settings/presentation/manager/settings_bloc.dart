@@ -10,6 +10,8 @@ import 'package:taskaya/core/utilites/cache_helper/file_caching_helper.dart';
 import 'package:taskaya/core/utilites/cache_helper/shared_pref.dart';
 import 'package:taskaya/core/utilites/constants/parameters.dart';
 
+import '../../../../core/utilites/functions/notification_handler/notification.dart';
+
 part 'settings_event.dart';
 part 'settings_state.dart';
 
@@ -25,7 +27,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SettingsEvent>((event, emit)async{
       switch(event){
         case InitialEvent():
-          FlutterNativeSplash.remove();
+          await initInApp();
           break;
         case ToggleModeEvent():
           await changeMood(emit);
@@ -50,6 +52,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         break;
       }
     });
+  }
+
+  Future<void> initInApp() async {
+     FlutterNativeSplash.remove();
+    await NotificationHandler().setListenerToNotification();
   }
 
   Future<void> changeMood(Emitter<SettingsState>emit)async{

@@ -12,3 +12,5 @@ final class UpdateCalendarMonthState extends CalendarState {}
 final class ChangePickedDayState extends CalendarState {}
 
 final class FilterListState extends CalendarState {}
+
+final class RefreshListState extends CalendarState {}

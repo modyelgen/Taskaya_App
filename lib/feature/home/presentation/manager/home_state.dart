@@ -33,7 +33,10 @@ final class LoadNewCategoryFailureState extends HomeState {
 
 final class SuccessAddNewTaskState extends HomeState {}
 
-final class MoveTaskState extends HomeState {}
+final class MoveTaskState extends HomeState {
+  final bool isComplete;
+  MoveTaskState({this.isComplete=false});
+}
 
 final class RemoveTaskState extends HomeState {}
 

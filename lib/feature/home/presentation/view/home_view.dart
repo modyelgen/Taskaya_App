@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
+import 'package:taskaya/core/utilites/widgets/complete_task.dart';
 import 'package:taskaya/feature/calendar/presentation/view/calendar_view.dart';
 import 'package:taskaya/feature/focus/presentation/view/foucs_view.dart';
 import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
@@ -21,10 +22,17 @@ class HomeView extends StatelessWidget {
     final double width = BasicDimension.screenWidth(context);
     final double height = BasicDimension.screenHeight(context);
     return BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc()..add(LoadCustomDataEvent())..add(LoadTaskEvent()),  // Create the bloc here
+      create: (context) => HomeBloc()..add(LoadTaskEvent())..add(LoadCustomDataEvent()),  // Create the bloc here
       child: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          // Handle state changes
+        listener: (context, state) async{
+          if(state is SuccessAddNewTaskState){
+
+          }
+          else if(state is MoveTaskState){
+            if(state.isComplete){
+              await showPopUpDialog(context: context,width: width);
+            }
+          }
         },
         builder: (context, state) {
           var bloc = BlocProvider.of<HomeBloc>(context);

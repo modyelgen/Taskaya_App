@@ -7,7 +7,7 @@ class TaskModel{
   String taskName;
   String? taskDescription;
   int?priority;
-  TaskTimeModel?taskTime;
+  DateTime?taskTime;
   CategoryModel?taskCategory;
   int completed;
   String taskID;
@@ -17,7 +17,7 @@ class TaskModel{
       'taskName': taskName,
       'taskDescription': taskDescription,
       'priority': priority,
-      'taskTime': jsonEncode(taskTime?.toMap()),
+      'taskTime': taskTime?.toIso8601String()??"null",
       'taskCategory':jsonEncode(taskCategory?.toJson()),
       'completed': completed,
       'taskID': taskID,
@@ -41,36 +41,14 @@ class TaskModel{
       taskID: map['taskID'],
       taskDescription: map['taskDescription'],
       priority: map['priority'],
-      taskTime: map['taskTime'] != "null" ? TaskTimeModel.fromMap(jsonDecode(map['taskTime'])) : null,
+      taskTime: map['taskTime'] != "null" ? DateTime.parse(map['taskTime']) : null,
       taskCategory: map['taskCategory'] != "null" ? CategoryModel.fromJson(jsonDecode(map['taskCategory']))  : null,
       completed: map['completed'],
     );
   }
 
 }
-class TaskTimeModel{
-  DateTime?dayDate;
-  TimeOfDay?dayHourMinute;
-  TaskTimeModel({this.dayDate,this.dayHourMinute});
-  Map<String, dynamic> toMap() {
-    return {
-      'dayDate': dayDate?.toIso8601String(),
-      'dayHourMinute': dayHourMinute != null ? '${dayHourMinute!.hour}:${dayHourMinute!.minute}' : null,
-    };
-  }
 
-  factory TaskTimeModel.fromMap(Map<String, dynamic> map) {
-    return TaskTimeModel(
-      dayDate: map['dayDate'] != null ? DateTime.parse(map['dayDate']) : null,
-      dayHourMinute: map['dayHourMinute'] != null
-          ? TimeOfDay(
-        hour: int.parse(map['dayHourMinute'].split(':')[0]),
-        minute: int.parse(map['dayHourMinute'].split(':')[1]),
-      )
-          : null,
-    );
-  }
-}
 class CategoryModel{
   Color?color;
   IconData?icon;

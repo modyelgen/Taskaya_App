@@ -31,7 +31,10 @@ class CalendarView extends StatelessWidget {
                     Expanded(
                       child: SizedBox(
                         height: height*0.5,
-                        child: ListView.builder(
+                        child: ListView.separated(
+                          separatorBuilder: (context,index){
+                            return SizedBox(height: height*0.0125,);
+                          },
                           padding: EdgeInsetsDirectional.all(width*0.025),
                           itemCount: bloc.filteredList.length,
                           itemBuilder: (context,index){
@@ -45,7 +48,12 @@ class CalendarView extends StatelessWidget {
               ),
             );
           },
-          listener: (context,state){}),
+          listener: (context,state){
+            var bloc=BlocProvider.of<CalendarBloc>(context);
+            if(state is SuccessAddNewTaskState){
+              bloc.add(RefreshCalendarListEvent());
+            }
+          }),
     );
   }
 }

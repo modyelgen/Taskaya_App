@@ -5,6 +5,8 @@ sealed class CalendarEvent {}
 
 final class InitialCalendarEvent extends CalendarEvent{}
 
+final class RefreshCalendarListEvent extends CalendarEvent{}
+
 final class ChangeDayPickerEvent extends CalendarEvent{
   final int index;
   ChangeDayPickerEvent({required this.index});

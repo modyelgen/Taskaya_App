@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:taskaya/core/utilites/cache_helper/file_caching_helper.dart';
 import 'package:taskaya/core/utilites/constants/parameters.dart';
+import 'package:taskaya/core/utilites/functions/notification_handler/notification.dart';
 import 'package:taskaya/feature/home/data/models/task_model.dart';
 import 'package:uuid/uuid.dart';
 part 'home_event.dart';
@@ -28,7 +29,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   TextEditingController describeController=TextEditingController();
   int? currFlag;
   int? currCategory;
-  TaskTimeModel?taskTimeModel;
+  DateTime?taskTime;
   List<TaskModel>taskList=[];
   List<TaskModel>filteredList=[];
   HomeBloc() : super(HomeInitialState()){
@@ -207,11 +208,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         taskDescription: describeController.text,
         taskCategory: pickCategory?categoryList[currCategory??0]:null,
         priority: pickPriority?currFlag:null,
-        taskTime: taskTimeModel==null?null:TaskTimeModel(dayDate:taskTimeModel?.dayDate,dayHourMinute:taskTimeModel?.dayHourMinute),
+        taskTime: taskTime,
       ));
       await saveTaskIntoDb(model: taskList.last);
       filteredList=List.from(taskList);
       emit(SuccessAddNewTaskState());
+      if(taskList.last.taskTime!=null){
+        await putNotificationForTask(taskaya: taskList.last);
+      }
       cleanModelAfter();
 
     }
@@ -245,13 +249,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
 
   Future<void>moveTask({required String taskID,required bool toComplete,required Emitter<HomeState>emit})async{
-    if(toComplete){
+    if(toComplete) {
       taskList.where((model)=>model.taskID==taskID).first.completed=1;
+      await disableNotificationForTask(id: taskID);
     }
     else{
       taskList.where((model)=>model.taskID==taskID).first.completed=0;
+      await updateNotificationForTask(taskaya: taskList.where((model)=>model.taskID==taskID).first);
     }
-    emit(MoveTaskState());
+    emit(MoveTaskState(isComplete: toComplete));
     updateTaskAtDb(task: taskList.where((model)=>model.taskID==taskID).first);
   }
 
@@ -261,6 +267,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     filteredList=List.from(taskList);
     emit(UpdateTaskHomeState());
     updateTaskAtDb(task: model);
+    if(model.taskTime!=null){
+      await updateNotificationForTask(taskaya: model);
+    }
   }
 
   Future<void>allowToPoop({required bool allow,required Emitter<HomeState>emit})async{
@@ -282,8 +291,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   }
 
-  void changeDayTime({DateTime? dayTime,TimeOfDay?hourTime}){
-    taskTimeModel=TaskTimeModel(dayDate: dayTime,dayHourMinute: hourTime);
+  void changeDayTime({required DateTime dayTime,required TimeOfDay hourTime}){
+    taskTime=dayTime.copyWith(hour:hourTime.hour,minute:hourTime.minute);
   }
 
   void cleanModelAfter(){
@@ -293,7 +302,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     pickCategory=false;
     currCategory=null;
     describeController.clear();
-    taskTimeModel=null;
+    taskTime=null;
   }
 
   Future<void> saveTaskIntoDb({required TaskModel model})async{
@@ -310,6 +319,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> deleteTask({required String taskID,required Emitter<HomeState>emit})async{
+    await disableNotificationForTask(id: taskID);
     taskList.removeWhere((model)=>model.taskID==taskID);
     filteredList=List.from(taskList);
     emit(RemoveTaskState());
@@ -318,10 +328,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       where: 'taskID = ?',
       whereArgs: [taskID],
     );
+
   }
 
   Future<void> updateTaskAtDb({required TaskModel task})async{
-
     await taskDb.update(
       'tasks',
       task.toMap(),
@@ -359,3 +369,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 }
 enum TaskTypesShowing {mission,complete}
+
+Future<void>putNotificationForTask({required TaskModel taskaya})async{
+  DateTime time= taskaya.taskTime!;
+  NotificationHandler handler=NotificationHandler();
+  if(await handler.checkAllowingNotify()){
+
+    await handler.createNewNotification(title: taskaya.taskName, body: taskaya.taskDescription, notifyDate:time,id: taskaya.taskID.hashCode);
+  }
+
+}
+
+Future<void>updateNotificationForTask({required TaskModel taskaya})async{
+  DateTime time= taskaya.taskTime!;
+  await NotificationHandler().updateCurrentNotification(title: taskaya.taskName, notifyDate: time, id: taskaya.taskID.hashCode);
+}
+
+Future<void>disableNotificationForTask({required String id})async{
+  await NotificationHandler().deleteCurrentNotification(id: id.hashCode);
+}
