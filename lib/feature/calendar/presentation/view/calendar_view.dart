@@ -17,7 +17,7 @@ class CalendarView extends StatelessWidget {
     final double height=BasicDimension.screenHeight(context);
 
     return BlocProvider(
-      create: (context)=>CalendarBloc(taskList: taskList)..add(InitialCalendarEvent()),
+      create: (context)=>CalendarBloc(taskList: taskList,homeBloc: homeBloc,)..add(InitialCalendarEvent()),
       child: BlocConsumer<CalendarBloc,CalendarState>(
           builder: (context,state){
             var bloc=BlocProvider.of<CalendarBloc>(context);
@@ -49,10 +49,10 @@ class CalendarView extends StatelessWidget {
             );
           },
           listener: (context,state){
-            var bloc=BlocProvider.of<CalendarBloc>(context);
-            if(state is SuccessAddNewTaskState){
-              bloc.add(RefreshCalendarListEvent());
-            }
+            // var bloc=BlocProvider.of<CalendarBloc>(context);
+            // if(state is SuccessAddNewTaskState){
+            //   bloc.add(RefreshCalendarListEvent());
+            // }
           }),
     );
   }

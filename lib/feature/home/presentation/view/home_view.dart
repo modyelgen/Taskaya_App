@@ -56,7 +56,11 @@ class HomeView extends StatelessWidget {
                   height: height,
                   name: bloc.name,
                 ):null,
-                body: [HomeBody(width: width, bloc: bloc, height: height),CalendarView(taskList:bloc.taskList,homeBloc: bloc,),const FocusView(),ProfileView(name:bloc.name,profilePath:bloc.profilePicPath)][bloc.bottomNavCurrIndex],
+                body: [
+                  HomeBody(width: width, bloc: bloc, height: height),
+                  CalendarView(taskList:bloc.taskList,homeBloc: bloc,),
+                  const FocusView(),
+                  ProfileView(name:bloc.name,profilePath:bloc.profilePicPath,taskCompleted:bloc.taskList.where((model)=>model.completed==1).length ,taskUnCompleted: bloc.taskList.where((model)=>model.completed==0).length ,)][bloc.bottomNavCurrIndex],
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
                 floatingActionButton:FloatingActionButton(
                   shape: const CircleBorder(),

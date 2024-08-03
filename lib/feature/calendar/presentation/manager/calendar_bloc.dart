@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:taskaya/feature/calendar/data/model/calendar_model.dart';
 import 'package:taskaya/feature/home/data/models/task_model.dart';
+import 'package:taskaya/feature/home/presentation/manager/home_bloc.dart';
 
 part 'calendar_event.dart';
 part 'calendar_state.dart';
@@ -16,9 +17,16 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   DateTime currentDate=DateTime.now();
   bool isLoading=false;
   bool firstTime=true;
+  final HomeBloc homeBloc;
+
   List<CalendarModel>calendarDaysList=[];
   List<TaskModel>filteredList=[];
-  CalendarBloc({required this.taskList}) : super(CalendarInitialState()) {
+  CalendarBloc({required this.taskList,required this.homeBloc}) : super(CalendarInitialState()) {
+    homeBloc.stream.listen((homeState) {
+      if (homeState is SuccessAddNewTaskState) {
+        add(RefreshCalendarListEvent()); // Dispatch an event to CalendarBloc
+      }
+    });
     on<CalendarEvent>((event, emit)async {
       switch(event){
         case InitialCalendarEvent():
@@ -36,6 +44,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
       }
     });
   }
+
   Future<void> updateCalendarDueToMonthChange({required Emitter<CalendarState>emit,required bool increase})async{
     currentDate=getCurrDateTime(increase: increase);
     fillCalendarDaysList(emit: emit);
@@ -100,6 +109,7 @@ class CalendarBloc extends Bloc<CalendarEvent, CalendarState> {
   }
 
   Future<void>refreshCalendarList({required Emitter<CalendarState>emit})async{
+    filterListAccordingToDay();
     emit(RefreshListState());
   }
 }
