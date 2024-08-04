@@ -45,12 +45,7 @@ class RouterApp {
       //     return const CalendarView();
       //   },
       // ),
-      GoRoute(
-        path: kFocusView,
-        builder: (context, state) {
-          return const FocusView();
-        },
-      ),
+
       // GoRoute(
       //   path: kProfileView,
       //   builder: (context, state) {

@@ -50,6 +50,7 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   uuid:
   awesome_notifications:
+  permission_handler:
 
 
 dev_dependencies:
