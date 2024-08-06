@@ -17,5 +17,6 @@ const List<String> monthNames = [
   "November",
   "December"
 ];
+List<String>weekDay=["FRI","SAT","SUN","MON","TUE","WED","THU"];
 const String notificationReminder='reminderNotificationChannel';
 

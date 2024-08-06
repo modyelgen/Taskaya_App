@@ -51,7 +51,7 @@ dependencies:
   uuid:
   awesome_notifications:
   permission_handler:
-
+  meta:
 
 dev_dependencies:
   flutter_test:

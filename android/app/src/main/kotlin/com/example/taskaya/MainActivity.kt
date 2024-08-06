@@ -21,6 +21,8 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.io.ByteArrayOutputStream
 import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.app/usage"
@@ -110,7 +112,8 @@ class MainActivity : FlutterActivity() {
         val dailyUsageList = mutableListOf<Map<String, Any>>()
 
         for ((date, topApps) in dailyUsageMap) {
-            val formattedDate = Calendar.getInstance().apply { timeInMillis = date }.time.toString()
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val formattedDate = dateFormat.format(Date(date))
 
             dailyUsageList.add(
                 mapOf(

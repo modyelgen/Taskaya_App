@@ -30,3 +30,14 @@ extension GetCurrMonth on int{
     return days[this - 1];
   }
 }
+extension HourMinute on Duration{
+  String getFormattedDuration()
+  {
+    int totalMinutes = inMinutes;
+    int hours = totalMinutes ~/ 60;
+    int minutes = totalMinutes % 60;
+    String formattedHours = hours.toString().padLeft(2, '0');
+    String formattedMinutes = minutes.toString().padLeft(2, '0');
+    return "$formattedHours:$formattedMinutes";
+  }
+}
