@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
-import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/functions/theme_function.dart';
 
 class CircularPercentageAvatar extends StatelessWidget {
-  const CircularPercentageAvatar({super.key,required this.width});
+  const CircularPercentageAvatar({super.key,required this.width,required this.appIcon,required this.percentage});
   final double width;
+  final String appIcon;
+  final double percentage;
 
   @override
   Widget build(BuildContext context) {
@@ -13,20 +15,20 @@ class CircularPercentageAvatar extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       children: [
         SizedBox(
-          width: width*0.45,
-          height: width*0.45,
+          width: width*0.2,
+          height: width*0.2,
           child: CircularProgressIndicator(
-            strokeWidth: 20,
-            value: 0.5,
+            strokeWidth: 5,
+            value: percentage,
             strokeCap: StrokeCap.round,
-            backgroundColor: bottomNavBarColor,
+            backgroundColor: const Color(0xffBDBDBD),
             color: buttonColor,
           ),
         ),
         CircleAvatar(
-          radius:width*0.2,
+          radius:width*0.06,
           backgroundColor: GetColor(context: context).getInverseColor(),
-          child: Text("00:30",style: CustomTextStyle.fontBold32.copyWith(color: GetColor(context: context).getNormalColor(),),),
+          child: appIcon==""?const Icon(Icons.error):Center(child: Image.memory(base64Decode(appIcon),errorBuilder: (context,_,s)=>const Icon(Icons.error),))
         ),
       ],
     );

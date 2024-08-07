@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/services.dart';
 
 class UsageStatsService {
@@ -8,8 +9,7 @@ class UsageStatsService {
       final result = await _channel.invokeMethod('getUsageStatsForLast7Days');
       return Map<String, dynamic>.from(result);
     } on PlatformException catch (e) {
-      print(e.toString());
-     // debugPrint('Failed to get usage stats: ${e.message}');
+      log(e.toString());
       return {};
     }
   }
@@ -18,6 +18,8 @@ class UsageStatsService {
     return result;
   }
   Future<void>openSettingToGetAccess()async{
+    var result=
     await _channel.invokeMethod("openUsageAccessSettings");
+    log("result is ${result.toString()}");
   }
 }

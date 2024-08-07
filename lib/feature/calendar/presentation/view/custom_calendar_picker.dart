@@ -46,6 +46,7 @@ class CustomCalendarWidget extends StatelessWidget {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 controller: bloc.scrollController,
+
                 physics:const BouncingScrollPhysics(),
                 itemBuilder: (context,index){
                   return CustomBigButton(

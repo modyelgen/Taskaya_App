@@ -130,11 +130,10 @@ class MainActivity : FlutterActivity() {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun getDailyUsage(date: Long): Map<String, Any> {
         val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-        val startOfDay = date
-        val endOfDay = startOfDay + 24 * 60 * 60 * 1000 - 1 // End of the day
+        val endOfDay = date + 24 * 60 * 60 * 1000 - 1 // End of the day
 
         val usageStatsList = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY, startOfDay, endOfDay
+            UsageStatsManager.INTERVAL_DAILY, date, endOfDay
         )
 
         val dailyUsageMap = mutableMapOf<String, Long>()

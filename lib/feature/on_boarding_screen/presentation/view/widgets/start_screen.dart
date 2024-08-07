@@ -2,15 +2,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
 import 'package:taskaya/core/utilites/dimensions/responsive_layout.dart';
-import 'package:taskaya/core/utilites/navigation/routers.dart';
 import 'package:taskaya/core/utilites/widgets/custom_big_button.dart';
 import 'package:taskaya/core/utilites/widgets/custom_text_form_field.dart';
+import 'package:taskaya/feature/home/presentation/view/home_view.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/manager/start_screen_cubit/start_screen_cubit.dart';
 import 'package:taskaya/feature/on_boarding_screen/presentation/view/widgets/otpion_pick_image.dart';
 
@@ -74,7 +73,7 @@ class StartScreenView extends StatelessWidget {
                             },color: purpleColor,altWidth: width,label: "join".tr(context),labelStyle: CustomTextStyle.fontBoldWhite16,borderRadius: 4,),
                             SizedBox(height: height*0.02,),
                             CustomBigButton(onTap: (){
-                              context.push(RouterApp.kHomeView);
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>const HomeView()));
                             },altWidth: width,label: "skip".tr(context),labelStyle: CustomTextStyle.fontBold16,boxBorder: Border.all(color: purpleColor,width: 2),borderRadius: 4,),
                           ],
                         ),

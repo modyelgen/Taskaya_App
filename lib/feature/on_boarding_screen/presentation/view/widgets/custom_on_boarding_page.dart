@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/custom_localization/custom_app_localization.dart';
-import 'package:taskaya/core/utilites/navigation/routers.dart';
 import 'package:taskaya/feature/on_boarding_screen/data/model.dart';
 import 'package:taskaya/core/utilites/app_theme/colors.dart';
+import 'package:taskaya/feature/on_boarding_screen/presentation/view/widgets/start_screen.dart';
 class CustomOnBoardingPage extends StatelessWidget {
   const CustomOnBoardingPage({super.key,required this.toggleMode,required this.toggleLang,required this.height,required this.width,required this.model,required this.currIndex,required this.moveBackward,required this.moveForward});
   final double width;
@@ -80,7 +79,7 @@ class CustomOnBoardingPage extends StatelessWidget {
                 GestureDetector(
                   onTap: (){
                     if(currIndex==2){
-                      context.push(RouterApp.kStartScreen);
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const StartScreenView()));
                     }
                     else{
                       moveForward();
