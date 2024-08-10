@@ -17,9 +17,10 @@ class AddTaskPop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:const EdgeInsets.all(16),
+      padding:EdgeInsetsDirectional.all(width*0.025),
       width: width,
       height: height*0.27,
+      constraints: BoxConstraints(maxWidth: width),
       decoration: BoxDecoration(
         color: bottomNavBarColor,
         borderRadius: const BorderRadius.only(topRight: Radius.circular(16),topLeft: Radius.circular(16)),
@@ -39,43 +40,47 @@ class AddTaskPop extends StatelessWidget {
           SizedBox(
             height: height*0.015,
           ),
-           Row(
-            children: [
-              IconButton(
-                  onPressed: ()async{
-                    await showDatePicker(
-                      context: context,
-                      barrierDismissible: false,
-                      firstDate: DateTime.now(),
-                      confirmText: "Choose Time",
-                      cancelText: "Cancel",
-                      initialDate:bloc.taskTime??DateTime.now(),
-                      lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((dayValue)async{
-                        if(dayValue!=null){
-                          await showTimePicker(context: context,barrierDismissible: false,initialTime:TimeOfDay.now(),).then((hourValue){
-                            if(hourValue!=null){
-                              bloc.changeDayTime(dayTime:dayValue,hourTime:hourValue);
-                            }
-                          });
-                        }
-                      });
-              },icon:Icon(Icons.timer_sharp,color:customBorderColor),tooltip: " Task Time",),
+           SizedBox(
+             height: height*0.05,
+             child: Row(
+               crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                IconButton(
+                    onPressed: ()async{
+                      await showDatePicker(
+                        context: context,
+                        barrierDismissible: false,
+                        firstDate: DateTime.now(),
+                        confirmText: "Choose Time",
+                        cancelText: "Cancel",
+                        initialDate:bloc.taskTime??DateTime.now(),
+                        lastDate: DateTime.now().copyWith(month: DateTime.now().month+4),).then((dayValue)async{
+                          if(dayValue!=null){
+                            await showTimePicker(context: context,barrierDismissible: false,initialTime:TimeOfDay.now(),).then((hourValue){
+                              if(hourValue!=null){
+                                bloc.changeDayTime(dayTime:dayValue,hourTime:hourValue);
+                              }
+                            });
+                          }
+                        });
+                },icon:Icon(Icons.timer_sharp,color:customBorderColor,size: height*0.03,),tooltip: " Task Time",),
 
-              IconButton(onPressed: ()async{
-                await showCategoryPicker(context: context, bloc: bloc, height: height, width: width);
-              },icon:Icon(CupertinoIcons.tags,color: customBorderColor,),tooltip: "Task Category",),
+                IconButton(onPressed: ()async{
+                  await showCategoryPicker(context: context, bloc: bloc, height: height, width: width);
+                },icon:Icon(CupertinoIcons.tags,color: customBorderColor,size: height*0.03,),tooltip: "Task Category",),
 
-              IconButton(onPressed: ()async{
-                await showPriorityPicker(context: context, bloc: bloc, height: height, width: width);
-              },icon:Icon(CupertinoIcons.flag,color:customBorderColor),tooltip: "Task Priority",),
+                IconButton(onPressed: ()async{
+                  await showPriorityPicker(context: context, bloc: bloc, height: height, width: width);
+                },icon:Icon(CupertinoIcons.flag,color:customBorderColor,size: height*0.03),tooltip: "Task Priority",),
 
-              const Spacer(),
-              IconButton(onPressed: (){
-                bloc.add(CreateNewTaskEvent());
-                Navigator.pop(context);
-              },icon:Icon(CupertinoIcons.paperplane,color: buttonColor,).rotate(angle: 45)),
-            ],
-          ),
+                const Spacer(),
+                IconButton(onPressed: (){
+                  bloc.add(CreateNewTaskEvent());
+                  Navigator.pop(context);
+                },icon:Icon(CupertinoIcons.paperplane,color: buttonColor,size: height*0.03,).rotate(angle: 45)),
+              ],
+                       ),
+           ),
         ],
       ),
     );
