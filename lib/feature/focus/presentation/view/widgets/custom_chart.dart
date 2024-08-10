@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:taskaya/core/utilites/app_theme/colors.dart';
+import 'package:taskaya/core/utilites/app_theme/text_style.dart';
 import 'package:taskaya/core/utilites/constants/parameters.dart';
 import 'package:taskaya/core/utilites/functions/get_curr_week_days.dart';
 import 'package:taskaya/feature/focus/data/model/focus_model.dart';
@@ -62,7 +64,7 @@ class CustomChart extends StatelessWidget {
                   children: [
                     ...List.generate(weekDay.length, (index)=>SizedBox(
                         width: width*0.1,
-                        child: Text(getWeekDaysList(list)[index],textAlign: TextAlign.center,))),
+                        child: Text(getWeekDaysList(list)[index],textAlign: TextAlign.center,style: CustomTextStyle.fontNormal14.copyWith(color:getWeekDaysList(list)[index]=="SAT"||getWeekDaysList(list)[index]=="SUN"?deleteColor:null),))),
                   ],
                 ),
               ),

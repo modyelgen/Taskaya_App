@@ -27,7 +27,9 @@ class TaskPriority extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Task Priority",style: CustomTextStyle.fontBoldWhite16),
+              SizedBox(
+                  height: height*0.035,
+                  child: Text("Task Priority",style: CustomTextStyle.fontBoldWhite16)),
               SizedBox(
                 width: width*0.75,
                 child: Divider(
@@ -39,44 +41,55 @@ class TaskPriority extends StatelessWidget {
               BlocBuilder<HomeBloc,HomeState>(
                 bloc: bloc,
                 builder: (context,state) {
-                  return Wrap(
-                    spacing: height*0.02,
-                    runSpacing: width*0.05,
-                    children: [
-                      ...List.generate(10, (index)=>GestureDetector(
-                          onTap: (){
-                            bloc.add(ChangeCurrFlagIndexEvent(index: index,pick: false));
-                          },
-                          child: PriorityItem(index: index,width: width,height: height,curr: index==bloc.currFlag,)))
-                    ],
+                  return Expanded(
+                    child: SizedBox(
+                      height: height*0.33,
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.zero,
+                        child: Wrap(
+                          spacing: height*0.02,
+                          runSpacing: width*0.05,
+                          children: [
+                            ...List.generate(10, (index)=>GestureDetector(
+                                onTap: (){
+                                  bloc.add(ChangeCurrFlagIndexEvent(index: index,pick: false));
+                                },
+                                child: PriorityItem(index: index,width: width,height: height,curr: index==bloc.currFlag,)))
+                          ],
+                        ),
+                      ),
+                    ),
                   );
                 }
               ),
               SizedBox(height: height*0.015,),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: width*0.025,
-                    ),
-                    TextButton(onPressed: (){
-                      bloc.add(ChangeCurrFlagIndexEvent(index: 0,pick: false));
-                      Navigator.pop(context,null);
-                    },child:Text("Cancel",style: CustomTextStyle.fontBold16.copyWith(color: buttonColor,decoration: TextDecoration.none),)),
-                    CustomBigButton(
-                      labelStyle: CustomTextStyle.fontBold18.copyWith(color: Colors.white),
-                      label: "Save",
-                      onTap: (){
-                        bloc.add(ChangeCurrFlagIndexEvent(index: bloc.currFlag??0,pick: true));
-                        Navigator.pop(context,bloc.currFlag);
-                      },
-                      borderRadius: 8,
-                      color: buttonColor,
-                      altWidth: width*0.4,
-                    ),
-                  ],
+              SizedBox(
+                height: height*0.06,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal:width*0.025 ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        width: width*0.025,
+                      ),
+                      TextButton(onPressed: (){
+                        bloc.add(ChangeCurrFlagIndexEvent(index: 0,pick: false));
+                        Navigator.pop(context,null);
+                      },child:Text("Cancel",style: CustomTextStyle.fontBold16.copyWith(color: buttonColor,decoration: TextDecoration.none),)),
+                      CustomBigButton(
+                        labelStyle: CustomTextStyle.fontBold18.copyWith(color: Colors.white),
+                        label: "Save",
+                        onTap: (){
+                          bloc.add(ChangeCurrFlagIndexEvent(index: bloc.currFlag??0,pick: true));
+                          Navigator.pop(context,bloc.currFlag);
+                        },
+                        borderRadius: 8,
+                        color: buttonColor,
+                        altWidth: width*0.4,
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

@@ -15,6 +15,6 @@ final class ConfirmToUpdateTaskState extends EditTaskState {
 }
 
 final class ConfirmToDeleteTaskState extends EditTaskState {
-  final String id;
+  final int id;
   ConfirmToDeleteTaskState({required this.id});
 }

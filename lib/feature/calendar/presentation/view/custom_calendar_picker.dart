@@ -22,6 +22,7 @@ class CustomCalendarWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsetsDirectional.all(width*0.025),
       width: width,
+
       decoration: BoxDecoration(
         color: bottomNavBarColor,
       ),

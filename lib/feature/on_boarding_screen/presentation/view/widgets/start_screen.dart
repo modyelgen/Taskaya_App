@@ -23,7 +23,9 @@ class StartScreenView extends StatelessWidget {
       create: (context)=>StartScreenCubit()..initDataBaseForPersonalInfo(),
       child:BlocConsumer<StartScreenCubit,StartScreenState>(
           listener: (context,state){
-
+            if(state is SuccessJoinInAppState){
+              Navigator.push(context,MaterialPageRoute(builder: (context)=>const HomeView()));
+            }
           },
           builder: (context,state){
             var cubit=BlocProvider.of<StartScreenCubit>(context);
@@ -66,10 +68,14 @@ class StartScreenView extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: height*0.05,),
-                            CustomTextFormField(label: "enter_Name".tr(context),filled: true,borderColor: purpleColor,maxLength: 18,controller: cubit.nameController,),
-                            SizedBox(height: height*0.225,),
-                            CustomBigButton(onTap: (){
-                              cubit.joinInApp();
+                            CustomTextFormField(label: "enter_Name".tr(context),border: 8,filled: true,borderColor: purpleColor,maxLength: 18,controller: cubit.nameController,),
+                            SizedBox(
+                              height: height*0.05,
+                              width: width*0.1,
+                            ),
+                            CustomBigButton(
+                              onTap: (){
+                                cubit.joinInApp();
                             },color: purpleColor,altWidth: width,label: "join".tr(context),labelStyle: CustomTextStyle.fontBoldWhite16,borderRadius: 4,),
                             SizedBox(height: height*0.02,),
                             CustomBigButton(onTap: (){

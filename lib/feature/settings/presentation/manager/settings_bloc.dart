@@ -36,7 +36,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
          await changeLanguage(emit);
          break;
         case ChangeNotificationEvent():
-          changeNotification(emit);
+          await changeNotification(emit);
           break;
         case DeleteCurrentImageEvent():
          await deleteProfilePic(name: event.name, emit: emit);
@@ -55,8 +55,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   }
 
   Future<void> initInApp() async {
-     FlutterNativeSplash.remove();
-    await NotificationHandler().setListenerToNotification();
+    FlutterNativeSplash.remove();
+    enableNotification=await CustomNotificationHandler().checkPermissionOfChannel()>0?true:false;
+    await CustomNotificationHandler.setListenerToNotification();
   }
 
   Future<void> changeMood(Emitter<SettingsState>emit)async{
@@ -92,8 +93,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
 
 
-  void changeNotification(Emitter<SettingsState>emit)async{
-    enableNotification=!enableNotification;
+  Future<void> changeNotification(Emitter<SettingsState>emit)async{
+    await CustomNotificationHandler().requestPermission().then((v)async{
+    enableNotification= await CustomNotificationHandler().checkPermissionOfChannel()>0?true:false;
+    });
     emit(ChangeNotificationState());
   }
 

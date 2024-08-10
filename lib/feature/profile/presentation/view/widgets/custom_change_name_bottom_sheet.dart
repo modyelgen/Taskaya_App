@@ -15,7 +15,7 @@ class CustomChangeNameBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding:const EdgeInsets.all(10),
+      padding:EdgeInsets.all(width*0.02),
       width: width*0.9,
       height: height*0.26,
       decoration: BoxDecoration(
@@ -24,10 +24,13 @@ class CustomChangeNameBottomSheet extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text("Change Account Name",style: CustomTextStyle.fontBoldWhite16,),
+          SizedBox(
+              height: height*0.03,
+              child: Text("Change Account Name",style: CustomTextStyle.fontBoldWhite16,)),
           SizedBox(height: height*0.01,),
           SizedBox(
             width: width*0.8,
+            height: height*0.015,
             child: const Divider(
               color: Color(0xff979797),
             ),
@@ -43,16 +46,19 @@ class CustomChangeNameBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: height*0.015,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(onPressed: (){
-                Navigator.pop(context);
-              },child:Text("Cancel",style: CustomTextStyle.fontNormal14.copyWith(color: purpleColor),),),
-              GestureDetector(
-                  onTap: onEdit,
-                  child: RemainOrCompleteTasks(width: width*0.8, height: height*0.8, text: "Edit",backGroundColor: purpleColor,))
-            ],
+          SizedBox(
+            height: height*0.07,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(onPressed: (){
+                  Navigator.pop(context);
+                },child:Text("Cancel",style: CustomTextStyle.fontNormal14.copyWith(color: purpleColor),),),
+                GestureDetector(
+                    onTap: onEdit,
+                    child: RemainOrCompleteTasks(width: width*0.8, height: height*0.8, text: "Edit",backGroundColor: purpleColor,))
+              ],
+            ),
           )
         ],
       ),

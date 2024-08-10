@@ -30,7 +30,7 @@ class HomeBody extends StatelessWidget {
         vertical: height * 0.015,
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             children: [

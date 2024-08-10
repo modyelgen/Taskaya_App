@@ -29,16 +29,21 @@ class TasksList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomBigButton(
-              altWidth: width*0.33,
+              altWidth: width*0.35,
               color: bottomNavBarColor,
               borderRadius: 6,
               altWidget: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Mission",style: CustomTextStyle.fontBoldWhite16,),
-                  IconButton(onPressed: (){
-                    bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.mission));
-                  },icon: Icon(bloc.showMission?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,))
+                  SizedBox(
+                      width:width*0.2,
+                      child: Text("Mission",style: CustomTextStyle.fontBoldWhite16,)),
+                  SizedBox(
+                    width: width*0.15,
+                    child: IconButton(onPressed: (){
+                      bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.mission));
+                    },icon: Icon(bloc.showMission?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,)),
+                  )
                 ],),),
             SizedBox(height: height*0.02,),
             (missionList.isNotEmpty&&bloc.showMission)?Expanded(
@@ -61,16 +66,21 @@ class TasksList extends StatelessWidget {
             Text("No Tasks Exist",style: CustomTextStyle.fontBold18,),
             SizedBox(height: height*0.02,),
             CustomBigButton(
-              altWidth: width*0.33,
+              altWidth: width*0.35,
               color: bottomNavBarColor,
               borderRadius: 6,
               altWidget: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Completed",style: CustomTextStyle.fontBoldWhite16,),
-                  IconButton(onPressed: (){
-                    bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.complete));
-                  },icon: Icon(bloc.showComplete?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,))
+                  SizedBox(
+                      width:width*0.2,
+                      child: Text("Completed",style: CustomTextStyle.fontBoldWhite16,maxLines: 1,)),
+                  SizedBox(
+                    width: width*0.15,
+                    child: IconButton(onPressed: (){
+                      bloc.add(ChangeShowOfTaskEvent(type: TaskTypesShowing.complete));
+                    },icon: Icon(bloc.showComplete?CupertinoIcons.chevron_down:CupertinoIcons.chevron_up,color: customBorderColor,)),
+                  )
                 ],),),
             SizedBox(height: height*0.02,),
             (completeList.isNotEmpty&&bloc.showComplete)?Expanded(

@@ -52,28 +52,31 @@ class CreateNewCategoryScreen extends StatelessWidget {
                         },label: "Choose icon from library",labelStyle: CustomTextStyle.fontNormal14.copyWith(color: Colors.white),borderRadius: 6,color: bottomNavBarColor,altWidth: width*0.5,),
                         SizedBox(height: height*0.035,),
                         PickCustomColor(height: height, width: width, cubit: cubit),
-                        SizedBox(height: height*0.1,),
+                        SizedBox(height: height*0.08,),
                         Center(child: CategoryItem(height: height, width: width,model: cubit.categoryModel,)),
                         const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton(onPressed: (){
-                              Navigator.pop(context);
-                            }, child: Text("Cancel",style: CustomTextStyle.fontBold18.copyWith(color: buttonColor),)),
-                            CustomBigButton(
-                              onTap: (){
-                                if(cubit.returnModel()){
-                                  Navigator.pop(context,cubit.categoryModel);
-                                }
-                              },
-                              color: buttonColor,
-                              altWidth: width*0.5,
-                              borderRadius: 4,
-                              label: "Create Category",
-                              labelStyle: CustomTextStyle.fontBoldWhite16,
-                            ),
-                          ],
+                        SizedBox(
+                          height: height*0.06,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, child: Text("Cancel",style: CustomTextStyle.fontBold18.copyWith(color: buttonColor),)),
+                              CustomBigButton(
+                                onTap: (){
+                                  if(cubit.returnModel()){
+                                    Navigator.pop(context,cubit.categoryModel);
+                                  }
+                                },
+                                color: buttonColor,
+                                altWidth: width*0.5,
+                                borderRadius: 4,
+                                label: "Create Category",
+                                labelStyle: CustomTextStyle.fontBoldWhite16,
+                              ),
+                            ],
+                          ),
                         ),
 
                       ],

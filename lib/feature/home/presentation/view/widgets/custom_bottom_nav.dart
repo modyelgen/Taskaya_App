@@ -18,17 +18,19 @@ class BottomNavBar extends StatelessWidget {
     final double height=BasicDimension.screenHeight(context);
     return BottomAppBar(
       elevation: 0,
+      padding: EdgeInsets.zero,
       color: bottomNavBarColor,
-      height: height*0.1,
+       height: height*0.12,
       notchMargin: 0,
       shape: const CircularNotchedRectangle(),
       child: SizedBox(
-        height: height*0.08,
         child: BottomNavigationBar(
             currentIndex:currIndex,
             onTap: (int index){
               changeIndex(currIndex: index);
             },
+            iconSize: height*0.033,
+
             type: BottomNavigationBarType.fixed,
             selectedItemColor: Colors.white,
             unselectedItemColor: Colors.grey,

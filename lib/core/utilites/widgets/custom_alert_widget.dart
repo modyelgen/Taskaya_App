@@ -14,7 +14,7 @@ class CustomAlertWidget extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       child: SizedBox(
         width: width*0.8,
-        height: height*0.2,
+        // height: height*0.2,
         child: Material(
             child: Padding(
               padding: EdgeInsetsDirectional.all(width*0.02),

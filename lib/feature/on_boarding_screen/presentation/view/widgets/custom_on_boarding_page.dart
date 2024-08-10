@@ -16,88 +16,87 @@ class CustomOnBoardingPage extends StatelessWidget {
   final void Function() toggleLang;
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width*0.05,vertical: height*0.02),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: toggleLang,
-                  child: Container(
-                    width: width*0.1,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: width*0.05,vertical: height*0.02),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: toggleLang,
+                child: Container(
+                  padding: EdgeInsets.zero,
+                  width: width*0.1,
+                  height: height*0.05,
+                  decoration: BoxDecoration(
+                    color: purpleColor,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(child: Text("curr_Lang".tr(context),style: CustomTextStyle.fontBoldWhite16)),
+                ),
+              ),
+              CircleAvatar(
+                  child: IconButton(onPressed: toggleMode, icon:Icon(Icons.dark_mode,color: Theme.of(context).colorScheme.onInverseSurface,)))
+            ],
+          ),
+          SizedBox(height: height*0.05),
+          Image.asset(model.assetPath,width: width*0.6,height: height*0.25,fit: BoxFit.fitHeight,),
+          SizedBox(height: height*0.05),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...List.generate(3, (index) =>Padding(
+                padding: EdgeInsets.only(right: width*0.015),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: index==currIndex?purpleColor:Colors.grey,
+                  ),
+                  width: width*0.075,
+                  height: height*0.008,
+                ),
+              )),
+            ],
+          ),
+          SizedBox(height: height*0.05,),
+          SizedBox(
+            width: width,
+            height: height*0.075,
+            child: Text(model.mainTitle.tr(context),style: CustomTextStyle.fontBold32,textAlign: TextAlign.center,),
+          ),
+          SizedBox(height: height*0.025,),
+          SizedBox(
+            width: width*0.75,
+            height: height*0.1,
+            child: SingleChildScrollView(child: Text(model.secondaryTitle.tr(context),style:CustomTextStyle.fontNormal16,maxLines: 3,textAlign: TextAlign.center,)),
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              TextButton(onPressed: moveBackward,child:Text("back_Button".tr(context),style: CustomTextStyle.fontBold16.copyWith(color: Colors.grey))),
+              GestureDetector(
+                onTap: (){
+                  if(currIndex==2){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const StartScreenView()));
+                  }
+                  else{
+                    moveForward();
+                  }
+                },
+                child: Container(
                     height: height*0.05,
+                    padding: EdgeInsets.all(width*0.01),
                     decoration: BoxDecoration(
                       color: purpleColor,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(child: Text("curr_Lang".tr(context),style: CustomTextStyle.fontBoldWhite16)),
-                  ),
-                ),
-                CircleAvatar(
-                    child: IconButton(onPressed: toggleMode, icon:Icon(Icons.dark_mode,color: Theme.of(context).colorScheme.onInverseSurface,)))
-              ],
-            ),
-            SizedBox(height: height*0.05),
-            Image.asset(model.assetPath,width: width*0.6,height: height*0.33,fit: BoxFit.fitHeight,),
-            SizedBox(height: height*0.05),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...List.generate(3, (index) =>Padding(
-                  padding: EdgeInsets.only(right: width*0.015),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      color: index==currIndex?purpleColor:Colors.grey,
-                    ),
-                    width: width*0.075,
-                    height: height*0.008,
-                  ),
-                )),
-              ],
-            ),
-            SizedBox(height: height*0.05,),
-            SizedBox(
-              width: width,
-              height: height*0.075,
-              child: Text(model.mainTitle.tr(context),style: CustomTextStyle.fontBold32,textAlign: TextAlign.center,),
-            ),
-            SizedBox(height: height*0.025,),
-            SizedBox(
-              width: width*0.75,
-              height: height*0.1,
-              child: Text(model.secondaryTitle.tr(context),style:CustomTextStyle.fontNormal16,maxLines: 3,textAlign: TextAlign.center,),
-            ),
-            SizedBox(height: height*0.1,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(onPressed: moveBackward,child:Text("back_Button".tr(context),style: CustomTextStyle.fontBold16.copyWith(color: Colors.grey))),
-                GestureDetector(
-                  onTap: (){
-                    if(currIndex==2){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const StartScreenView()));
-                    }
-                    else{
-                      moveForward();
-                    }
-                  },
-                  child: Container(
-                      height: height*0.05,
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        color: purpleColor,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child:Center(child:  Text(currIndex==2?"get_started".tr(context):"next_Button".tr(context),style: CustomTextStyle.fontBoldWhite16))),
-                ),
-              ],
-            )
-          ],
-        ),
+                    child:Center(child:  Text(currIndex==2?"get_started".tr(context):"next_Button".tr(context),style: CustomTextStyle.fontBoldWhite16))),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

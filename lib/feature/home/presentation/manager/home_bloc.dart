@@ -1,6 +1,6 @@
 
+import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
@@ -19,6 +19,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   bool pickCategory=false;
   bool pickPriority=false;
   String name='';
+  final StreamController<String> messageStreamController = StreamController<String>.broadcast();
   String querySearch='';
   bool showMission=true;
   bool showComplete=true;
@@ -33,6 +34,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<TaskModel>taskList=[];
   List<TaskModel>filteredList=[];
   HomeBloc() : super(HomeInitialState()){
+    startMethod();
     on<HomeEvent>((event, emit) async{
       switch(event){
         case LoadCustomDataEvent():
@@ -76,7 +78,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         case UpdateTaskEvent():
           await updateTask(model: event.model, emit: emit);
           break;
+        case RefreshTaskList():
+          emit(RefreshTaskHomeState());
+          break;
       }
+    });
+
+  }
+  void startMethod()async{
+    Timer.periodic(const Duration(minutes: 1), (t){
+      add(RefreshTaskList());
     });
   }
   Future<void> loadPersonalInfo(Emitter<HomeState>emit)async{
@@ -136,7 +147,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           onCreate: (database,version){
             return database.execute(
               'CREATE TABLE tasks('
-                  'taskID TEXT PRIMARY KEY, '
+                  'taskID INTEGER PRIMARY KEY, '
                   'taskName TEXT, '
                   'taskDescription TEXT, '
                   'priority INTEGER, '
@@ -203,7 +214,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       var uuid = const Uuid();
       String id = uuid.v4();
       taskList.add(TaskModel(
-        taskID: id,
+        taskID: id.hashCode,
         taskName: taskController.text,
         taskDescription: describeController.text,
         taskCategory: pickCategory?categoryList[currCategory??0]:null,
@@ -248,7 +259,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
 
-  Future<void>moveTask({required String taskID,required bool toComplete,required Emitter<HomeState>emit})async{
+  Future<void>moveTask({required int taskID,required bool toComplete,required Emitter<HomeState>emit})async{
     if(toComplete) {
       taskList.where((model)=>model.taskID==taskID).first.completed=1;
       await disableNotificationForTask(id: taskID);
@@ -318,7 +329,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  Future<void> deleteTask({required String taskID,required Emitter<HomeState>emit})async{
+  Future<void> deleteTask({required int taskID,required Emitter<HomeState>emit})async{
     await disableNotificationForTask(id: taskID);
     taskList.removeWhere((model)=>model.taskID==taskID);
     filteredList=List.from(taskList);
@@ -372,19 +383,19 @@ enum TaskTypesShowing {mission,complete}
 
 Future<void>putNotificationForTask({required TaskModel taskaya})async{
   DateTime time= taskaya.taskTime!;
-  NotificationHandler handler=NotificationHandler();
+  CustomNotificationHandler handler=CustomNotificationHandler();
   if(await handler.checkAllowingNotify()){
 
-    await handler.createNewNotification(title: taskaya.taskName, body: taskaya.taskDescription, notifyDate:time,id: taskaya.taskID.hashCode);
+    await handler.createNewNotification(title: taskaya.taskName, body: taskaya.taskDescription, notifyDate:time,id: taskaya.taskID);
   }
 
 }
 
 Future<void>updateNotificationForTask({required TaskModel taskaya})async{
   DateTime time= taskaya.taskTime!;
-  await NotificationHandler().updateCurrentNotification(title: taskaya.taskName, notifyDate: time, id: taskaya.taskID.hashCode);
+  await CustomNotificationHandler().updateCurrentNotification(title: taskaya.taskName, notifyDate: time, id: taskaya.taskID);
 }
 
-Future<void>disableNotificationForTask({required String id})async{
-  await NotificationHandler().deleteCurrentNotification(id: id.hashCode);
+Future<void>disableNotificationForTask({required int id})async{
+  await CustomNotificationHandler().deleteCurrentNotification(id: id);
 }

@@ -6,7 +6,7 @@ part 'edit_task_state.dart';
 class EditTaskCubit extends Cubit<EditTaskState> {
   EditTaskCubit({required this.model}) : super(EditTaskInitialState());
   TaskModel model;
-  TaskModel tempModel=TaskModel(taskName: "", taskID: "");
+  TaskModel tempModel=TaskModel(taskName: "", taskID: 0);
   TextEditingController taskController=TextEditingController();
   TextEditingController descController=TextEditingController();
   void initTaskWithTemp()async{

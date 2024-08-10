@@ -68,6 +68,7 @@ class HomeView extends StatelessWidget {
                     await showModalBottomSheet(context: context,
                         isScrollControlled: true,
                         isDismissible: false,
+                        constraints: BoxConstraints(maxWidth: width),
                         builder: (context)=>Padding(
                           padding: EdgeInsets.only(bottom:MediaQuery.of(context).viewInsets.bottom),
                           child:AddTaskPop(height: height, width: width,bloc: bloc,),

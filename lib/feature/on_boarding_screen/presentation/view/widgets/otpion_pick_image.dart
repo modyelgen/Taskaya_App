@@ -22,58 +22,71 @@ class OptionPickImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height*0.2,
+      height: height*0.22,
       padding: EdgeInsets.symmetric(horizontal: width*0.05,vertical: height*0.015),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12))
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("profilePic".tr(context),style: CustomTextStyle.fontBold16,),
-              IconButton(onPressed:deleteImage, icon:  const Icon(CupertinoIcons.delete_simple))
-            ],
+          SizedBox(
+            height: height*0.05,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("profilePic".tr(context),style: CustomTextStyle.fontBold16,),
+                IconButton(onPressed:deleteImage, icon:  const Icon(CupertinoIcons.delete_simple))
+              ],
+            ),
           ),
           SizedBox(height: height*0.015),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                children: [
-                  Container(
-                    width:width*0.125,
-                    decoration: BoxDecoration(
-                      shape:BoxShape.circle,
-                      border: Border.all(color: purpleColor),
+              SizedBox(
+                height: height*0.12,
+                child: Column(
+                  children: [
+                    Container(
+                      width:width*0.125,
+                      height: height*0.065,
+                      decoration: BoxDecoration(
+                        shape:BoxShape.circle,
+                        border: Border.all(color: purpleColor),
+                      ),
+                      child: IconButton(padding: EdgeInsets.zero,onPressed:(){pickImage(source: ImageSource.camera);},icon: Icon(CupertinoIcons.camera,color: purpleColor,size: width*0.05,)),
                     ),
-                    child: IconButton(onPressed:(){pickImage(source: ImageSource.camera);},icon: Icon(CupertinoIcons.camera,color: purpleColor,)),
-                  ),
-                  SizedBox(
-                    height: height*0.015,
-                  ),
-                  Text("camera".tr(context),style: CustomTextStyle.fontNormal12,),
-                ],
+                    SizedBox(
+                      height: height*0.01,
+                    ),
+                    Text("camera".tr(context),style: CustomTextStyle.fontNormal12,),
+                  ],
+                ),
               ),
               SizedBox(width: width*0.05,),
-              Column(
-                children: [
-                  Container(
-                    width:width*0.125,
-                    decoration: BoxDecoration(
-                      shape:BoxShape.circle,
-                      border: Border.all(color: purpleColor),
+              SizedBox(
+                height: height*0.12,
+                child: Column(
+                  children: [
+                    Container(
+                      width:width*0.125,
+                      height: height*0.065,
+                      decoration: BoxDecoration(
+                        shape:BoxShape.circle,
+                        border: Border.all(color: purpleColor),
+                      ),
+                      child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: (){
+                            pickImage(source: ImageSource.gallery);
+                      }, icon: Icon(CupertinoIcons.photo,color: purpleColor,size: width*0.05,)),
                     ),
-                    child: IconButton(onPressed: (){
-                      pickImage(source: ImageSource.gallery);
-                    }, icon: Icon(CupertinoIcons.photo,color: purpleColor,)),
-                  ),
-                  SizedBox(
-                    height: height*0.015,
-                  ),
-                  Text("gallery".tr(context),style: CustomTextStyle.fontNormal12,),
-                ],
+                    SizedBox(
+                      height: height*0.01,
+                    ),
+                    Text("gallery".tr(context),style: CustomTextStyle.fontNormal12,),
+                  ],
+                ),
               ),
             ],
           ),

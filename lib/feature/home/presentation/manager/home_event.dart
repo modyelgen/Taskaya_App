@@ -29,12 +29,12 @@ final class ChangeCurrCategoryIndexEvent extends HomeEvent {
 final class CreateNewTaskEvent extends HomeEvent {}
 
 final class MoveTaskEvent extends HomeEvent {
-  final String taskID;
+  final int taskID;
   final bool toComplete;
   MoveTaskEvent({required this.toComplete,required this.taskID});
 }
 final class RemoveTaskEvent extends HomeEvent {
-  final String taskID;
+  final int taskID;
   RemoveTaskEvent({required this.taskID});
 }
 
@@ -58,3 +58,4 @@ final class UpdateTaskEvent extends HomeEvent {
   final TaskModel model;
   UpdateTaskEvent({required this.model});
 }
+final class RefreshTaskList extends HomeEvent{}

@@ -28,9 +28,12 @@ class TaskCategory extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Choose Category",style: CustomTextStyle.fontBoldWhite16),
+              SizedBox(
+                  height: height*0.04,
+                  child: Text("Choose Category",style: CustomTextStyle.fontBoldWhite16)),
               SizedBox(
                 width: width*0.75,
+                height: height*0.02,
                 child: Divider(
                   thickness: 1,
                   color: customBorderColor,
@@ -40,6 +43,7 @@ class TaskCategory extends StatelessWidget {
               SizedBox(
                 height: height*0.3,
                 child: SingleChildScrollView(
+                  padding: EdgeInsets.zero,
                   physics: const BouncingScrollPhysics(),
                   child: BlocBuilder<HomeBloc,HomeState>(
                     bloc: bloc,
@@ -75,7 +79,7 @@ class TaskCategory extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: height*0.05,),
+              SizedBox(height: height*0.025,),
               CustomBigButton(altWidth: width*0.8,color: buttonColor,label: "Choose Category",borderRadius: 4,labelStyle: CustomTextStyle.fontBoldWhite16,onTap: (){
                 bloc.currCategory!=null?
                 bloc.add(ChangeCurrCategoryIndexEvent(index: bloc.currCategory!,pick: true))

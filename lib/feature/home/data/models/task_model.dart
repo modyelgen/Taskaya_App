@@ -10,7 +10,7 @@ class TaskModel{
   DateTime?taskTime;
   CategoryModel?taskCategory;
   int completed;
-  String taskID;
+  int taskID;
   TaskModel({required this.taskName,required this.taskID,this.taskTime,this.priority,this.taskCategory,this.taskDescription,this.completed=0});
   Map<String, dynamic> toMap() {
     return {

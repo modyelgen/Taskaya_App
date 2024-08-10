@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -12,13 +13,15 @@ void main()async{
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   Bloc.observer=SimpleBlocObserver();
   await SetAppState.setShared();
-  await NotificationHandler().initNotification();
+  await AwesomeNotifications().getInitialNotificationAction(
+      removeFromActionEvents: false
+  );
+  await CustomNotificationHandler.initNotification();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

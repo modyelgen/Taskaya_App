@@ -13,10 +13,24 @@ class CustomMaterialApp extends StatelessWidget {
   });
 
   final SettingsBloc bloc;
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
+      initialRoute: '/',
+      onGenerateRoute: (setting){
+        return MaterialPageRoute(
+            builder: (context)=>getHomeWidget(
+                OnBoardingArgument(toggleMode: (){
+                  bloc.add(ToggleModeEvent());},
+                    toggleLang: (){
+                  bloc.add(ChangeLanguageEvent());}
+                ),
+            ),
+        );
+      },
       supportedLocales: const [
         Locale('en'),
         Locale('ar'),
@@ -41,11 +55,11 @@ class CustomMaterialApp extends StatelessWidget {
       theme: bloc.appTheme,
       themeMode: bloc.appMode,
       darkTheme: darkTheme,
-      home:getHomeWidget(OnBoardingArgument(toggleMode: (){
-        bloc.add(ToggleModeEvent());
-      }, toggleLang: (){
-        bloc.add(ChangeLanguageEvent());
-      })),
+      // home:getHomeWidget(OnBoardingArgument(toggleMode: (){
+      //   bloc.add(ToggleModeEvent());
+      // }, toggleLang: (){
+      //   bloc.add(ChangeLanguageEvent());
+      // })),
     );
   }
 }
